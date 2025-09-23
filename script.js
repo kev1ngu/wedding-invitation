@@ -34,12 +34,12 @@ function initFlipClockIntro() {
         }, delay);
     });
     
-    // 显示主标题 "The Wedding Calls"
+    // 显示主标题 "the wedding calls"
     setTimeout(() => {
         mainTitle.classList.add('show');
     }, 1500);
     
-    // 完成动画后停留2秒，然后显示主内容
+    // 完成动画后停留3秒，然后显示主内容 (总时长：11秒 = 3s闪烁 + 4s打字 + 4s闪烁)
     setTimeout(() => {
         // 淡出开场动画
         flipClockIntro.style.transition = 'opacity 1s ease-out';
@@ -57,7 +57,7 @@ function initFlipClockIntro() {
                 mainContent.style.opacity = '1';
             }, 100);
         }, 1000);
-    }, 5000);
+    }, 12000);
 }
 
 // 跳过开场动画

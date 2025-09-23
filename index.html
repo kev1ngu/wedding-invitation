@@ -15,6 +15,12 @@
             font-weight: normal;
             font-style: normal;
         }
+        @font-face {
+            font-family: 'Calmsie';
+            src: url('fonts/Calmsie.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
     </style>
 </head>
 <body>
@@ -35,58 +41,31 @@
 
     <!-- 翻页时钟开场动画 -->
     <div id="flip-clock-intro" class="flip-clock-intro">
-        <div class="flip-clock-container">
-            <!-- 翻页卡片 -->
-            <div class="flip-card" data-emoji="1">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <div class="emoji-content">✨</div>
-                    </div>
-                    <div class="flip-card-back">
-                        <div class="emoji-content">💕</div>
-                    </div>
-                </div>
+        <!-- 翻页卡片容器 -->
+        <div class="flip-cards-container">
+            <div class="flip-card">
+                <div class="card-front">✨</div>
+                <div class="card-back">💕</div>
             </div>
-            
-            <div class="flip-card" data-emoji="2">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <div class="emoji-content">🪐</div>
-                    </div>
-                    <div class="flip-card-back">
-                        <div class="emoji-content">👰</div>
-                    </div>
-                </div>
+            <div class="flip-card">
+                <div class="card-front">🪐</div>
+                <div class="card-back">👰</div>
             </div>
-            
-            <div class="flip-card" data-emoji="3">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <div class="emoji-content">🌙</div>
-                    </div>
-                    <div class="flip-card-back">
-                        <div class="emoji-content">🤵</div>
-                    </div>
-                </div>
+            <div class="flip-card">
+                <div class="card-front">🌙</div>
+                <div class="card-back">🤵</div>
             </div>
-            
-            <div class="flip-card" data-emoji="4">
-                <div class="flip-card-inner">
-                    <div class="flip-card-front">
-                        <div class="emoji-content">☀️</div>
-                    </div>
-                    <div class="flip-card-back">
-                        <div class="emoji-content">💒</div>
-                    </div>
-                </div>
+            <div class="flip-card">
+                <div class="card-front">☀️</div>
+                <div class="card-back">💒</div>
             </div>
         </div>
         
         <!-- 主标题 -->
-        <h1 id="main-title" class="main-title">the wedding calls</h1>
+        <h1 id="main-title" class="wedding-title">the wedding calls</h1>
         
         <!-- 跳过按钮 -->
-        <button class="skip-intro-btn" onclick="skipIntro()">跳过 ›</button>
+        <button class="skip-btn" onclick="skipIntro()">跳过 ›</button>
     </div>
 
     <!-- 主页面 -->
