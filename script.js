@@ -1,21 +1,15 @@
 
 
-// 翻页时钟开场动画控制
-function initFlipClockIntro() {
+// 翻页时钟动画控制 - 页面内嵌版本
+function initFlipClockAnimation() {
     const flipCards = document.querySelectorAll('.flip-card');
     const mainTitle = document.getElementById('main-title');
-    const flipClockIntro = document.getElementById('flip-clock-intro');
-    const mainContent = document.getElementById('main-content');
-    const navbar = document.querySelector('.navbar');
     
     // 确保元素存在
-    if (!flipCards.length || !mainTitle || !flipClockIntro || !mainContent || !navbar) {
+    if (!flipCards.length || !mainTitle) {
         console.log('翻页时钟元素未找到，跳过动画');
         return;
     }
-    
-    // 隐藏导航栏和主内容
-    navbar.style.display = 'none';
     
     // 翻页时钟动画序列 - 快速翻页
     const flipSequence = [
@@ -38,43 +32,6 @@ function initFlipClockIntro() {
     setTimeout(() => {
         mainTitle.classList.add('show');
     }, 1500);
-    
-    // 完成动画后停留3秒，然后显示主内容 (总时长：11秒 = 3s闪烁 + 4s打字 + 4s闪烁)
-    setTimeout(() => {
-        // 淡出开场动画
-        flipClockIntro.style.transition = 'opacity 1s ease-out';
-        flipClockIntro.style.opacity = '0';
-        
-        setTimeout(() => {
-            flipClockIntro.style.display = 'none';
-            mainContent.style.display = 'block';
-            navbar.style.display = 'block';
-            
-            // 淡入主内容
-            mainContent.style.opacity = '0';
-            mainContent.style.transition = 'opacity 1s ease-in';
-            setTimeout(() => {
-                mainContent.style.opacity = '1';
-            }, 100);
-        }, 1000);
-    }, 12000);
-}
-
-// 跳过开场动画
-function skipIntro() {
-    const flipClockIntro = document.getElementById('flip-clock-intro');
-    const mainContent = document.getElementById('main-content');
-    const navbar = document.querySelector('.navbar');
-    
-    if (flipClockIntro && mainContent && navbar) {
-        // 立即隐藏开场动画
-        flipClockIntro.style.display = 'none';
-        
-        // 显示主内容和导航栏
-        mainContent.style.display = 'block';
-        mainContent.style.opacity = '1';
-        navbar.style.display = 'block';
-    }
 }
 
 // 平滑滚动到指定部分
@@ -88,30 +45,6 @@ function scrollToSection(sectionId) {
     }
 }
 
-// 导航栏滚动效果
-window.addEventListener('scroll', function() {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.8)';
-        navbar.style.boxShadow = 'none';
-    }
-});
-
-// 导航链接点击事件
-document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            scrollToSection(targetId);
-        });
-    });
-});
 
 // 表单提交处理
 document.addEventListener('DOMContentLoaded', function() {
@@ -201,8 +134,8 @@ const observer = new IntersectionObserver(function(entries) {
 
 // 页面加载完成后初始化动画
 document.addEventListener('DOMContentLoaded', function() {
-    // 启动翻页时钟开场动画
-    initFlipClockIntro();
+    // 启动翻页时钟动画
+    initFlipClockAnimation();
     
     // 为需要动画的元素添加观察器
     const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-text');
@@ -281,19 +214,6 @@ function debounce(func, wait) {
     };
 }
 
-// 优化滚动事件
-const optimizedScrollHandler = debounce(function() {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.background = 'rgba(255, 255, 255, 0.8)';
-        navbar.style.boxShadow = 'none';
-    }
-}, 10);
-
-window.addEventListener('scroll', optimizedScrollHandler);
 
 // 添加页面可见性API支持
 document.addEventListener('visibilitychange', function() {
