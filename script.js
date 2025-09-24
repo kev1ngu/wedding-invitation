@@ -4,6 +4,7 @@
 function initFlipClockAnimation() {
     const flipCards = document.querySelectorAll('.flip-card');
     const mainTitle = document.getElementById('main-title');
+    const scrollArrow = document.getElementById('scrollArrow');
     
     // 确保元素存在
     if (!flipCards.length || !mainTitle) {
@@ -32,6 +33,39 @@ function initFlipClockAnimation() {
     setTimeout(() => {
         mainTitle.classList.add('show');
     }, 1500);
+    
+    // 显示向下箭头
+    setTimeout(() => {
+        if (scrollArrow) {
+            scrollArrow.style.opacity = '1';
+        }
+    }, 2500);
+    
+    // 添加箭头点击事件
+    if (scrollArrow) {
+        scrollArrow.addEventListener('click', () => {
+            const heroSection = document.getElementById('home');
+            if (heroSection) {
+                // 箭头消失动画
+                scrollArrow.style.opacity = '0';
+                scrollArrow.style.transform = 'translateX(-50%) translateY(10px)';
+                scrollArrow.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                
+                // 滚动到hero section
+                heroSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // 延迟移除元素
+                setTimeout(() => {
+                    if (scrollArrow.parentNode) {
+                        scrollArrow.parentNode.removeChild(scrollArrow);
+                    }
+                }, 300);
+            }
+        });
+    }
 }
 
 // 平滑滚动到指定部分

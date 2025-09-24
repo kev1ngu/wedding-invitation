@@ -50,6 +50,11 @@
                 
                 <!-- 主标题 -->
                 <h1 id="main-title" class="wedding-title">the wedding calls</h1>
+                
+                <!-- 向下箭头 -->
+                <div class="scroll-arrow" id="scrollArrow">
+                    <div class="arrow-icon">↓</div>
+                </div>
             </div>
         </section>
 
@@ -59,12 +64,6 @@
                 <div class="hero-text">
                     <h1 class="hero-title">我们结婚了</h1>
                     <h2 class="hero-subtitle">顾煜文 & 杨馨如</h2>
-                    <p class="hero-date">2025年10月25日</p>
-                    <div class="hero-cta">
-                        <button class="cta-button" onclick="scrollToSection('ceremony')">
-                            查看婚礼仪式
-                        </button>
-                    </div>
                 </div>
                 <div class="hero-image">
                     <div class="image-placeholder">
@@ -77,28 +76,42 @@
 
         <!-- 地图section -->
         <section id="map" class="map-section">
-            <div class="container">
-                <div class="map-card">
-                    <div class="map-view">
-                        <h3>高德地图 view</h3>
-                    </div>
+            <div class="map-layout">
+                <!-- 左侧：地图view -->
+                <div class="map-view-container">
                     <div class="location-info">
                         <div class="location-item">
-                            <span class="location-label">位置描述</span>
+                            <span class="location-label">人民中路 109 号</span>
+                            <span class="location-value">无锡苏宁银河酒店 8F 大宴会厅</span>
+
                         </div>
                         <div class="location-item">
-                            <span class="location-label">无锡地铁</span>
-                            <span class="location-value">exit</span>
+                            <span class="location-label">公共交通</span>
+                            <div class="metro-icons">
+                                <img src="images/WX_Metro_Line_1_icon.svg.png" alt="无锡地铁1号线" class="metro-icon">
+                                <img src="images/WX_Metro_Line_2_icon.svg.png" alt="无锡地铁2号线" class="metro-icon">
+                                <span class="location-value">三阳广场站 (20B 出口)</span>
+                            </div>
                         </div>
                         <div class="location-item">
-                            <span class="location-label">停车</span>
-                            <span class="location-value">pop-up 导览</span>
-                        </div>
-                        <div class="location-action">
-                            <span class="action-text">获取路线</span>
-                            <span class="action-icon">📍</span>
+                            <span class="location-label">驾车前往</span>
+                            <div class="button-group">
+                                <div class="location-action">
+                                    <span class="action-text">获取路线</span>
+                                    <span class="action-icon">🗺</span>
+                                </div>
+                                <div class="location-action">
+                                    <span class="action-text">停车导览</span>
+                                    <span class="action-icon">🅿️</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- 右侧：位置图片 -->
+                <div class="location-image-container">
+                    <img src="images/location_raw.001.png" alt="婚礼地点" class="location-image">
                 </div>
             </div>
         </section>
