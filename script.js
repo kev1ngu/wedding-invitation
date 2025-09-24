@@ -34,38 +34,17 @@ function initFlipClockAnimation() {
         mainTitle.classList.add('show');
     }, 1500);
     
-    // 显示向下箭头
+    // 显示向下箭头并初始化功能
     setTimeout(() => {
+        console.log('尝试显示箭头, scrollArrow:', scrollArrow);
         if (scrollArrow) {
+            console.log('箭头元素找到，开始显示');
             scrollArrow.style.opacity = '1';
+            initScrollArrowLogic(scrollArrow); // 箭头显示后立即初始化功能
+        } else {
+            console.log('箭头元素未找到!');
         }
     }, 2500);
-    
-    // 添加箭头点击事件
-    if (scrollArrow) {
-        scrollArrow.addEventListener('click', () => {
-            const heroSection = document.getElementById('home');
-            if (heroSection) {
-                // 箭头消失动画
-                scrollArrow.style.opacity = '0';
-                scrollArrow.style.transform = 'translateX(-50%) translateY(10px)';
-                scrollArrow.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                
-                // 滚动到hero section
-                heroSection.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                
-                // 延迟移除元素
-                setTimeout(() => {
-                    if (scrollArrow.parentNode) {
-                        scrollArrow.parentNode.removeChild(scrollArrow);
-                    }
-                }, 300);
-            }
-        });
-    }
 }
 
 // 平滑滚动到指定部分
@@ -357,4 +336,96 @@ function initBackgroundMusic() {
 
 // 初始化背景音乐
 initBackgroundMusic();
+
+// 滚动箭头功能 - 在箭头显示后初始化
+function initScrollArrowLogic(arrow) {
+    console.log('initScrollArrowLogic被调用, arrow:', arrow);
+    if (!arrow) {
+        console.log('arrow为空，退出');
+        return;
+    }
+    
+    console.log('开始初始化箭头逻辑');
+    let isHidden = false;
+    
+    // 找到实际的滚动容器
+    const mainContent = document.getElementById('main-content');
+    const scrollContainer = mainContent || document.body;
+    
+    console.log('滚动容器:', scrollContainer);
+    
+    function hideArrow() {
+        if (isHidden) return;
+        isHidden = true;
+        
+        // 移除滚动监听器
+        scrollContainer.removeEventListener('scroll', correctScrollListener);
+        
+        arrow.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        arrow.style.opacity = '0';
+        arrow.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            if (arrow && arrow.parentNode) {
+                arrow.remove();
+            }
+        }, 400);
+    }
+    
+    // 滚动时隐藏 - 监听正确的滚动容器
+    console.log('绑定滚动监听器');
+    
+    // 修改滚动监听器以使用正确的滚动位置
+    const correctScrollListener = () => {
+        if (isHidden) return;
+        
+        // 获取正确的滚动位置
+        const currentScroll = mainContent ? mainContent.scrollTop : window.scrollY;
+        console.log('滚动位置:', currentScroll);
+        
+        // 检查是否滚动到下一个section
+        const animationSection = document.querySelector('.animation-section');
+        const heroSection = document.querySelector('.hero-section');
+        
+        if (animationSection && heroSection) {
+            const animationBottom = animationSection.offsetHeight;
+            const heroTop = heroSection.offsetTop;
+            
+            console.log('动画section底部:', animationBottom);
+            console.log('hero section顶部:', heroTop);
+            console.log('当前滚动:', currentScroll);
+            
+            // 如果滚动超过动画section的底部，或者接近hero section，立即隐藏
+            if (currentScroll >= animationBottom - 100 || currentScroll >= heroTop - 200) {
+                console.log('触发section隐藏');
+                hideArrow();
+                return;
+            }
+        }
+        
+        // 任何滚动都触发隐藏（备用机制）
+        if (currentScroll > 50) {
+            console.log('触发普通滚动隐藏');
+            hideArrow();
+        }
+    };
+    
+    // 绑定到正确的滚动容器
+    scrollContainer.addEventListener('scroll', correctScrollListener, { passive: true });
+    
+    console.log('滚动监听器绑定完成');
+    
+    // 点击时隐藏并滚动
+    arrow.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        hideArrow();
+        
+        setTimeout(() => {
+            document.getElementById('home').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }, 100);
+    });
+}
 
