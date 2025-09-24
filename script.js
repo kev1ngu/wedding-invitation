@@ -344,11 +344,7 @@ function initParkingModal() {
     
     // 显示模态框
     function showModal() {
-        modal.style.display = 'flex';
-        setTimeout(() => {
-            modal.classList.add('show');
-        }, 10);
-        
+        modal.classList.add('show');
         // 防止背景滚动
         document.body.style.overflow = 'hidden';
     }
@@ -358,10 +354,9 @@ function initParkingModal() {
         modal.classList.remove('show');
         modal.classList.add('hiding');
         setTimeout(() => {
-            modal.style.display = 'none';
             modal.classList.remove('hiding');
             document.body.style.overflow = '';
-        }, 200);
+        }, 150);
     }
     
     // 点击按钮显示模态框
