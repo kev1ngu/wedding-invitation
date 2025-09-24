@@ -319,3 +319,42 @@ window.addEventListener('load', function() {
     // 可以在这里添加统计代码或其他第三方服务
 });
 
+// 背景音乐控制
+function initBackgroundMusic() {
+    const bgm = document.getElementById('bgm');
+    if (!bgm) return;
+    
+    // 设置音量
+    bgm.volume = 0.3; // 30% 音量
+    
+    // 尝试播放音乐
+    const playMusic = () => {
+        bgm.play().catch(error => {
+            console.log('自动播放被阻止，需要用户交互:', error);
+            // 如果自动播放失败，在用户首次交互时播放
+            document.addEventListener('click', () => {
+                bgm.play().catch(e => console.log('播放失败:', e));
+            }, { once: true });
+        });
+    };
+    
+    // 页面加载后尝试播放
+    setTimeout(playMusic, 1000);
+    
+    // 监听音乐播放状态
+    bgm.addEventListener('play', () => {
+        console.log('背景音乐开始播放');
+    });
+    
+    bgm.addEventListener('pause', () => {
+        console.log('背景音乐暂停');
+    });
+    
+    bgm.addEventListener('error', (e) => {
+        console.error('背景音乐播放错误:', e);
+    });
+}
+
+// 初始化背景音乐
+initBackgroundMusic();
+
