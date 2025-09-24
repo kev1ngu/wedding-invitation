@@ -310,8 +310,71 @@ main {
     font-size: 36px;
     font-weight: 500;
     color: #007aff;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     line-height: 1.2;
+}
+
+/* Avatar头像组 */
+.avatar-group {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 6px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: scale(0) translateY(20px);
+}
+
+/* 滚动触发后的动画状态 */
+.avatar-group.animate .avatar:nth-child(1) {
+    animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    animation-delay: 0.1s;
+}
+
+.avatar-group.animate .avatar:nth-child(2) {
+    animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    animation-delay: 0.3s;
+}
+
+.avatar-group.animate .avatar:nth-child(3) {
+    animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    animation-delay: 0.5s;
+}
+
+.avatar-group.animate .avatar:nth-child(4) {
+    animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    animation-delay: 0.7s;
+}
+
+/* 弹出动画关键帧 */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0) translateY(20px);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2) translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
 
 .hero-date {
@@ -1201,6 +1264,17 @@ main {
     
     .hero-subtitle {
         font-size: 28px;
+    }
+    
+    .avatar-group {
+        gap: 16px;
+        margin-bottom: 25px;
+    }
+    
+    .avatar {
+        width: 80px;
+        height: 80px;
+        border-width: 4px;
     }
     
     .hero-date {

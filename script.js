@@ -225,6 +225,31 @@ function initTabSwitcher() {
     });
 }
 
+// Avatar头像滚动触发动画
+function initAvatarAnimation() {
+    const avatarGroup = document.querySelector('.avatar-group');
+    if (!avatarGroup) return;
+    
+    // 创建Intersection Observer
+    const avatarObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 当avatar-group进入视口时，添加animate类触发动画
+                avatarGroup.classList.add('animate');
+                console.log('Avatar动画开始！');
+                // 动画触发后停止观察
+                avatarObserver.unobserve(avatarGroup);
+            }
+        });
+    }, {
+        threshold: 0.3, // 当30%的元素可见时触发
+        rootMargin: '0px 0px -50px 0px' // 提前50px触发
+    });
+    
+    // 开始观察avatar-group
+    avatarObserver.observe(avatarGroup);
+}
+
 // 页面加载完成后初始化动画
 document.addEventListener('DOMContentLoaded', function() {
     // 启动翻页时钟动画
@@ -232,6 +257,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化Tab切换器
     initTabSwitcher();
+    
+    // 初始化Avatar滚动动画
+    initAvatarAnimation();
     
     // 为需要动画的元素添加观察器
     const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-text');
