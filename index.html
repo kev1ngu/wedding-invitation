@@ -109,7 +109,7 @@
                                         <span class="action-text">获取路线</span>
                                         <span class="action-icon">🗺</span>
                                     </a>
-                                    <div class="location-action">
+                                    <div class="location-action" id="parkingGuideBtn">
                                         <span class="action-text">停车导览</span>
                                         <span class="action-icon">🅿️</span>
                                     </div>
@@ -184,6 +184,62 @@
 
 
     </main>
+
+    <!-- 停车导览模态框 -->
+    <div class="parking-modal" id="parkingModal">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>停车导览</h3>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="parking-info">
+                    <div class="parking-item">
+                        <div class="parking-icon">⛪️</div>
+                        <div class="parking-details">
+                            <h4>苏宁广场地下停车库（推荐）</h4>
+                            <p>酒店 B2 - B3 层有停车位，电梯直达</p>
+                            <p>向后翻页有停放导览图</p>
+                            <span class="parking-fee">FREE</span>
+                        </div>
+                    </div>
+                    <div class="parking-item">
+                        <div class="parking-icon">🅿️</div>
+                        <div class="parking-details">
+                            <h4>小娄巷街区地面停车场</h4>
+                            <p>新生路街正对过，过街即到</p>
+                            <p>步行约 3 分钟</p>
+                            <span class="parking-fee">¥6 前两小时</span>
+                        </div>
+                    </div>
+                    <div class="parking-item">
+                        <div class="parking-icon">🚗</div>
+                        <div class="parking-details">
+                            <h4>恒隆广场地下停车库</h4>
+                            <p>充足停车位</p>
+                            <p>从恒隆广场 B1 进入三阳广场地铁站，到 20B 出口即到酒店
+                            <p>步行约 10 分钟</p>
+                            <span class="parking-fee">¥8 每小时</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="parking-tips">
+                    <h4>💡 温馨提示</h4>
+                    <ul>
+                        <li>建议提前 20 分钟到达，苏宁广场地下停车场车位紧张</li>
+                        <li>我们仅为停在苏宁地下停车库的宾客提供当天的免费停车券</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 背景音乐 -->
+    <audio id="bgm" loop autoplay>
+        <source src="sounds/bgm.m4a" type="audio/mp4">
+        您的浏览器不支持音频播放。
+    </audio>
 
     <script src="script.js"></script>
 </body>

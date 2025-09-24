@@ -1268,3 +1268,252 @@ main {
     }
 }
 
+/* 停车导览模态框 - 苹果风格 */
+.parking-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.parking-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    cursor: pointer;
+}
+
+.modal-content {
+    position: relative;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    max-width: 480px;
+    width: 90%;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    opacity: 0;
+}
+
+.parking-modal.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.parking-modal.hiding .modal-content {
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.02em;
+}
+
+.modal-close {
+    background: rgba(0, 0, 0, 0.06);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #1d1d1f;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-weight: 300;
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.12);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 16px 28px 28px;
+    overflow-y: auto;
+    max-height: calc(80vh - 80px);
+}
+
+.parking-info {
+    margin-bottom: 24px;
+}
+
+.parking-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.parking-item:last-child {
+    border-bottom: none;
+}
+
+.parking-icon {
+    font-size: 24px;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #f5f5f7, #e8e8ed);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.parking-details {
+    flex: 1;
+}
+
+.parking-details h4 {
+    margin: 0 0 6px 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.01em;
+}
+
+.parking-details p {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: #86868b;
+    line-height: 1.4;
+}
+
+.parking-fee {
+    display: inline-block;
+    background: linear-gradient(135deg, #007aff, #0051d5);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.parking-tips {
+    background: linear-gradient(135deg, 
+        rgba(255, 204, 0, 0.1), 
+        rgba(255, 149, 0, 0.1));
+    border: 1px solid rgba(255, 204, 0, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.parking-tips h4 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1d1d1f;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.parking-tips ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style: none;
+}
+
+.parking-tips li {
+    position: relative;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #424245;
+    line-height: 1.5;
+}
+
+.parking-tips li:last-child {
+    margin-bottom: 0;
+}
+
+.parking-tips li::before {
+    content: '•';
+    position: absolute;
+    left: -16px;
+    color: #ff9500;
+    font-weight: bold;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 20px;
+        width: calc(100% - 40px);
+        max-height: calc(100vh - 40px);
+        border-radius: 20px;
+    }
+    
+    .modal-header {
+        padding: 20px 24px 12px;
+    }
+    
+    .modal-header h3 {
+        font-size: 20px;
+    }
+    
+    .modal-body {
+        padding: 12px 24px 24px;
+    }
+    
+    .parking-item {
+        gap: 12px;
+        padding: 12px 0;
+    }
+    
+    .parking-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .parking-details h4 {
+        font-size: 16px;
+    }
+    
+    .parking-details p {
+        font-size: 14px;
+    }
+}
+

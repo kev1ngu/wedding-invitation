@@ -36,13 +36,9 @@ function initFlipClockAnimation() {
     
     // 显示向下箭头并初始化功能
     setTimeout(() => {
-        console.log('尝试显示箭头, scrollArrow:', scrollArrow);
         if (scrollArrow) {
-            console.log('箭头元素找到，开始显示');
             scrollArrow.style.opacity = '1';
             initScrollArrowLogic(scrollArrow); // 箭头显示后立即初始化功能
-        } else {
-            console.log('箭头元素未找到!');
         }
     }, 2500);
 }
@@ -337,22 +333,78 @@ function initBackgroundMusic() {
 // 初始化背景音乐
 initBackgroundMusic();
 
-// 滚动箭头功能 - 在箭头显示后初始化
-function initScrollArrowLogic(arrow) {
-    console.log('initScrollArrowLogic被调用, arrow:', arrow);
-    if (!arrow) {
-        console.log('arrow为空，退出');
-        return;
+// 停车导览模态框功能
+function initParkingModal() {
+    const parkingBtn = document.getElementById('parkingGuideBtn');
+    const modal = document.getElementById('parkingModal');
+    const backdrop = document.getElementById('modalBackdrop');
+    const closeBtn = document.getElementById('modalClose');
+    
+    if (!parkingBtn || !modal || !backdrop || !closeBtn) return;
+    
+    // 显示模态框
+    function showModal() {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+        
+        // 防止背景滚动
+        document.body.style.overflow = 'hidden';
     }
     
-    console.log('开始初始化箭头逻辑');
+    // 隐藏模态框
+    function hideModal() {
+        modal.classList.remove('show');
+        modal.classList.add('hiding');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.remove('hiding');
+            document.body.style.overflow = '';
+        }, 200);
+    }
+    
+    // 点击按钮显示模态框
+    parkingBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        showModal();
+    });
+    
+    // 点击背景隐藏模态框
+    backdrop.addEventListener('click', hideModal);
+    
+    // 点击关闭按钮隐藏模态框
+    closeBtn.addEventListener('click', hideModal);
+    
+    // ESC键隐藏模态框
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            hideModal();
+        }
+    });
+    
+    // 防止模态框内容区域点击时关闭
+    const modalContent = modal.querySelector('.modal-content');
+    if (modalContent) {
+        modalContent.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    }
+}
+
+// 初始化停车导览模态框
+initParkingModal();
+
+// 滚动箭头功能 - 在箭头显示后初始化
+function initScrollArrowLogic(arrow) {
+    if (!arrow) return;
+    
     let isHidden = false;
     
     // 找到实际的滚动容器
     const mainContent = document.getElementById('main-content');
     const scrollContainer = mainContent || document.body;
-    
-    console.log('滚动容器:', scrollContainer);
     
     function hideArrow() {
         if (isHidden) return;
@@ -373,7 +425,6 @@ function initScrollArrowLogic(arrow) {
     }
     
     // 滚动时隐藏 - 监听正确的滚动容器
-    console.log('绑定滚动监听器');
     
     // 修改滚动监听器以使用正确的滚动位置
     const correctScrollListener = () => {
@@ -381,7 +432,6 @@ function initScrollArrowLogic(arrow) {
         
         // 获取正确的滚动位置
         const currentScroll = mainContent ? mainContent.scrollTop : window.scrollY;
-        console.log('滚动位置:', currentScroll);
         
         // 检查是否滚动到下一个section
         const animationSection = document.querySelector('.animation-section');
@@ -391,13 +441,9 @@ function initScrollArrowLogic(arrow) {
             const animationBottom = animationSection.offsetHeight;
             const heroTop = heroSection.offsetTop;
             
-            console.log('动画section底部:', animationBottom);
-            console.log('hero section顶部:', heroTop);
-            console.log('当前滚动:', currentScroll);
             
             // 如果滚动超过动画section的底部，或者接近hero section，立即隐藏
             if (currentScroll >= animationBottom - 100 || currentScroll >= heroTop - 200) {
-                console.log('触发section隐藏');
                 hideArrow();
                 return;
             }
@@ -405,7 +451,6 @@ function initScrollArrowLogic(arrow) {
         
         // 任何滚动都触发隐藏（备用机制）
         if (currentScroll > 50) {
-            console.log('触发普通滚动隐藏');
             hideArrow();
         }
     };
@@ -413,7 +458,6 @@ function initScrollArrowLogic(arrow) {
     // 绑定到正确的滚动容器
     scrollContainer.addEventListener('scroll', correctScrollListener, { passive: true });
     
-    console.log('滚动监听器绑定完成');
     
     // 点击时隐藏并滚动
     arrow.addEventListener('click', (e) => {
