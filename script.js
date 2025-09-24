@@ -141,44 +141,86 @@ const observer = new IntersectionObserver(function(entries) {
     });
 }, observerOptions);
 
-// Tab切换功能
+// Tab切换功能 - 重新设计的左右滑动动画
 function initTabSwitcher() {
     const tabItems = document.querySelectorAll('.tab-item');
     const mapContent = document.getElementById('map-content');
     const calendarContent = document.getElementById('calendar-content');
     const brushPath = document.querySelector('.brush-path');
     
-    // 确保初始状态正确
-    mapContent.classList.add('active');
-    calendarContent.classList.remove('active');
+    let currentTab = 'map'; // 记录当前激活的tab
     
-    tabItems.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabType = tab.getAttribute('data-tab');
+    // 初始化状态
+    function initializeState() {
+        console.log('开始初始化Tab状态...');
+        console.log('mapContent:', mapContent);
+        console.log('calendarContent:', calendarContent);
+        
+        // 清理所有状态类
+        mapContent.className = 'tab-content';
+        calendarContent.className = 'tab-content';
+        
+        // 设置初始位置：Map显示在中央，Calendar隐藏在右侧
+        mapContent.classList.add('active');
+        calendarContent.classList.add('inactive-right');
+        
+        console.log('初始化完成：');
+        console.log('- Map classes:', mapContent.className);
+        console.log('- Calendar classes:', calendarContent.className);
+    }
+    
+    // 切换到指定tab
+    function switchToTab(targetTab) {
+        if (targetTab === currentTab) return;
+        
+        console.log(`切换：${currentTab} → ${targetTab}`);
+        
+        if (targetTab === 'map') {
+            // Calendar → Map：整体向右滑动
+            // Calendar向右滑出，Map从左滑入
+            calendarContent.classList.remove('active');
+            calendarContent.classList.add('inactive-right');
             
-            // 移除所有active类
-            tabItems.forEach(item => item.classList.remove('active'));
-            // 添加active类到当前tab
-            tab.classList.add('active');
+            mapContent.classList.remove('inactive-left');
+            mapContent.classList.add('active');
             
-            // 切换内容显示
-            if (tabType === 'map') {
-                mapContent.classList.add('active');
-                calendarContent.classList.remove('active');
-                console.log('切换到Map');
-            } else if (tabType === 'calendar') {
-                mapContent.classList.remove('active');
-                calendarContent.classList.add('active');
-                console.log('切换到Calendar');
-                
-                // 触发手写毛笔动画
+        } else if (targetTab === 'calendar') {
+            // Map → Calendar：整体向左滑动  
+            // Map向左滑出，Calendar从右滑入
+            mapContent.classList.remove('active');
+            mapContent.classList.add('inactive-left');
+            
+            calendarContent.classList.remove('inactive-right');
+            calendarContent.classList.add('active');
+            
+            // 触发手写毛笔动画
+            setTimeout(() => {
                 if (brushPath) {
                     brushPath.style.animation = 'none';
                     setTimeout(() => {
                         brushPath.style.animation = 'drawBrush 2.5s ease-in-out forwards';
                     }, 100);
                 }
-            }
+            }, 150); // 等待滑动动画开始
+        }
+        
+        currentTab = targetTab;
+    }
+    
+    // 初始化
+    initializeState();
+    
+    // 绑定事件
+    tabItems.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabType = tab.getAttribute('data-tab');
+            
+            // 更新tab按钮状态
+            tabItems.forEach(item => item.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // 执行切换
+            switchToTab(tabType);
         });
     });
 }
