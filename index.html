@@ -61,8 +61,8 @@
                     <h2 class="hero-subtitle">顾煜文 & 杨馨如</h2>
                     <p class="hero-date">2025年10月25日</p>
                     <div class="hero-cta">
-                        <button class="cta-button" onclick="scrollToSection('story')">
-                            了解我们的故事
+                        <button class="cta-button" onclick="scrollToSection('ceremony')">
+                            查看婚礼仪式
                         </button>
                     </div>
                 </div>
@@ -74,88 +74,57 @@
             </div>
         </section>
 
-        <!-- 我们的故事 -->
-        <section id="story" class="story-section">
-            <div class="container">
-                <h2 class="section-title">我们的故事</h2>
-                <div class="story-content">
-                    <div class="story-text">
-                        <p>从相遇的那一刻起，我们就知道彼此是命中注定的人。经过多年的相知相守，我们决定携手共度余生。</p>
-                        <p>在这个特别的日子里，我们诚挚地邀请您见证我们的幸福时刻，分享我们的喜悦。</p>
-                    </div>
-                    <div class="story-timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-date">2020</div>
-                            <div class="timeline-content">我们相遇</div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date">2023</div>
-                            <div class="timeline-content">我们相爱</div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date">2025</div>
-                            <div class="timeline-content">我们结婚</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- 婚礼仪式 -->
         <section id="ceremony" class="ceremony-section">
             <div class="container">
                 <h2 class="section-title">婚礼仪式</h2>
-                <div class="ceremony-details">
-                    <div class="ceremony-card">
-                        <h3>婚礼仪式</h3>
-                        <p class="ceremony-time">2025年10月25日 下午2:00</p>
-                        <p class="ceremony-location">香格里拉大酒店</p>
-                        <p class="ceremony-address">上海市浦东新区陆家嘴金融贸易区</p>
+                <div class="ceremony-cards">
+                    <!-- 左侧：高德地图卡片 -->
+                    <div class="map-card">
+                        <div class="map-view">
+                            <h3>高德地图 view</h3>
+                        </div>
+                        <div class="location-info">
+                            <div class="location-item">
+                                <span class="location-label">位置描述</span>
+                            </div>
+                            <div class="location-item">
+                                <span class="location-label">无锡地铁</span>
+                                <span class="location-value">exit</span>
+                            </div>
+                            <div class="location-item">
+                                <span class="location-label">停车</span>
+                                <span class="location-value">pop-up 导览</span>
+                            </div>
+                            <div class="location-action">
+                                <span class="action-text">获取路线</span>
+                                <span class="action-icon">📍</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="ceremony-card">
-                        <h3>婚宴晚宴</h3>
-                        <p class="ceremony-time">2025年10月25日 晚上6:00</p>
-                        <p class="ceremony-location">香格里拉大酒店</p>
-                        <p class="ceremony-address">上海市浦东新区陆家嘴金融贸易区</p>
+
+                    <!-- 右侧：日历卡片 -->
+                    <div class="calendar-card">
+                        <div class="calendar-view">
+                            <h3>日历 view</h3>
+                        </div>
+                        <div class="time-info">
+                            <div class="time-section">
+                                <h4>时间</h4>
+                                <p class="ceremony-time">2025年10月25日</p>
+                                <p class="ceremony-time">下午2:00 - 晚上9:00</p>
+                            </div>
+                            <div class="calendar-action">
+                                <span class="action-text">添加到日历</span>
+                                <span class="action-icon">📅</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- RSVP确认 -->
-        <section id="rsvp" class="rsvp-section">
-            <div class="container">
-                <h2 class="section-title">确认出席</h2>
-                <div class="rsvp-content">
-                    <p class="rsvp-text">您的出席将为我们的婚礼增添更多喜悦</p>
-                    <form class="rsvp-form">
-                        <div class="form-group">
-                            <label for="name">姓名</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">联系电话</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="guests">出席人数</label>
-                            <select id="guests" name="guests" required>
-                                <option value="">请选择</option>
-                                <option value="1">1人</option>
-                                <option value="2">2人</option>
-                                <option value="3">3人</option>
-                                <option value="4">4人</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">祝福留言（可选）</label>
-                            <textarea id="message" name="message" rows="4"></textarea>
-                        </div>
-                        <button type="submit" class="submit-button">确认出席</button>
-                    </form>
-                </div>
-            </div>
-        </section>
     </main>
 
     <script src="script.js"></script>

@@ -9,9 +9,10 @@ body {
     font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: #1d1d1f;
-    overflow-x: hidden;
+    overflow: hidden;
     margin: 0;
     padding: 0;
+    height: 100vh;
 }
 
 
@@ -20,6 +21,8 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
+    height: 100vh;
+    scroll-snap-align: start;
 }
 
 /* 翻页时钟动画容器 */
@@ -193,19 +196,25 @@ body {
     }
 }
 
-/* 主页面 */
+/* 主页面 - 启用滚动对齐 */
 main {
     margin: 0;
     padding: 0;
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* 首页横幅 */
 .hero-section {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     align-items: center;
     position: relative;
     overflow: hidden;
+    scroll-snap-align: start;
 }
 
 .hero-section::before {
@@ -346,206 +355,167 @@ main {
     border-radius: 2px;
 }
 
-/* 我们的故事 */
-.story-section {
-    padding: 120px 0;
-    background: #ffffff;
-}
 
-.story-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-}
-
-.story-text p {
-    font-size: 20px;
-    line-height: 1.8;
-    color: #515154;
-    margin-bottom: 30px;
-}
-
-.story-timeline {
-    position: relative;
-}
-
-.story-timeline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #e5e5e7;
-    transform: translateX(-50%);
-}
-
-.timeline-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 40px;
-    position: relative;
-}
-
-.timeline-item:nth-child(odd) {
-    flex-direction: row-reverse;
-}
-
-.timeline-item:nth-child(odd) .timeline-content {
-    text-align: right;
-    margin-right: 30px;
-}
-
-.timeline-item:nth-child(even) .timeline-content {
-    margin-left: 30px;
-}
-
-.timeline-date {
-    background: #007aff;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 16px;
-    position: relative;
-    z-index: 1;
-}
-
-.timeline-content {
-    font-size: 18px;
-    font-weight: 500;
-    color: #1d1d1f;
-}
 
 /* 婚礼仪式 */
 .ceremony-section {
-    padding: 120px 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
     background: #f5f5f7;
+    scroll-snap-align: start;
 }
 
-.ceremony-details {
+/* 婚礼仪式卡片布局 */
+.ceremony-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.ceremony-card {
+/* 地图卡片 */
+.map-card {
     background: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.ceremony-card:hover {
+.map-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
 }
 
-.ceremony-card h3 {
+.map-view {
+    background: linear-gradient(135deg, #FFA726, #FF9800);
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
     font-size: 24px;
     font-weight: 600;
-    color: #1d1d1f;
+}
+
+.location-info {
+    padding: 30px;
+}
+
+.location-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.location-item:last-of-type {
+    border-bottom: none;
     margin-bottom: 20px;
+}
+
+.location-label {
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+}
+
+.location-value {
+    font-size: 16px;
+    color: #1d1d1f;
+    font-weight: 600;
+}
+
+.location-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #007aff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.location-action:hover {
+    background: #0056cc;
+}
+
+/* 日历卡片 */
+.calendar-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.calendar-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+}
+
+.calendar-view {
+    background: linear-gradient(135deg, #FFA726, #FF9800);
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.time-info {
+    padding: 30px;
+}
+
+.time-section h4 {
+    font-size: 20px;
+    color: #1d1d1f;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
 .ceremony-time {
     font-size: 18px;
-    font-weight: 500;
-    color: #007aff;
+    color: #666;
     margin-bottom: 10px;
-}
-
-.ceremony-location {
-    font-size: 16px;
-    font-weight: 500;
-    color: #1d1d1f;
-    margin-bottom: 5px;
-}
-
-.ceremony-address {
-    font-size: 14px;
-    color: #86868b;
     line-height: 1.5;
 }
 
-/* RSVP确认 */
-.rsvp-section {
-    padding: 120px 0;
-    background: #ffffff;
-}
-
-.rsvp-content {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.rsvp-text {
-    font-size: 20px;
-    text-align: center;
-    color: #515154;
-    margin-bottom: 50px;
-}
-
-.rsvp-form {
-    background: #f5f5f7;
-    padding: 40px;
-    border-radius: 16px;
-}
-
-.form-group {
-    margin-bottom: 30px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 16px;
-    font-weight: 500;
-    color: #1d1d1f;
-    margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 16px;
-    border: 1px solid #d2d2d7;
-    border-radius: 8px;
-    font-size: 16px;
-    font-family: inherit;
-    background: white;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #007aff;
-    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-}
-
-.submit-button {
-    width: 100%;
-    background: #007aff;
+.calendar-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #34C759;
     color: white;
-    border: none;
-    padding: 16px;
-    font-size: 18px;
-    font-weight: 500;
-    border-radius: 8px;
+    padding: 12px 20px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: inherit;
+    margin-top: 25px;
+    transition: background 0.3s ease;
 }
 
-.submit-button:hover {
-    background: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3);
+.calendar-action:hover {
+    background: #28a745;
 }
+
+.action-text {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.action-icon {
+    font-size: 18px;
+}
+
 
 /* 页脚 */
 .footer {
@@ -667,6 +637,10 @@ main {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+    /* 移动端可能需要调整滚动行为 */
+    main {
+        scroll-snap-type: none;
+    }
     
     .hero-content {
         grid-template-columns: 1fr;
@@ -690,25 +664,23 @@ main {
         font-size: 36px;
     }
     
-    .story-content {
+    /* 婚礼仪式响应式 */
+    .ceremony-cards {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
     }
     
-    .story-timeline::before {
-        left: 20px;
+    .map-view,
+    .calendar-view {
+        height: 150px;
+        font-size: 20px;
     }
     
-    .timeline-item {
-        flex-direction: row !important;
-        padding-left: 50px;
+    .location-info,
+    .time-info {
+        padding: 25px;
     }
     
-    .timeline-item .timeline-content {
-        margin-left: 20px !important;
-        margin-right: 0 !important;
-        text-align: left !important;
-    }
     
     .ceremony-details {
         grid-template-columns: 1fr;
@@ -718,9 +690,6 @@ main {
         padding: 30px;
     }
     
-    .rsvp-form {
-        padding: 30px;
-    }
     
     .image-placeholder {
         width: 300px;
@@ -749,9 +718,6 @@ main {
         padding: 20px;
     }
     
-    .rsvp-form {
-        padding: 20px;
-    }
     
     .image-placeholder {
         width: 250px;
