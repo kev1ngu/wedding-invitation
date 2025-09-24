@@ -166,10 +166,46 @@ const observer = new IntersectionObserver(function(entries) {
     });
 }, observerOptions);
 
+// Tab切换功能
+function initTabSwitcher() {
+    const tabItems = document.querySelectorAll('.tab-item');
+    const mapContent = document.getElementById('map-content');
+    const calendarContent = document.getElementById('calendar-content');
+    
+    // 确保初始状态正确
+    mapContent.classList.add('active');
+    calendarContent.classList.remove('active');
+    
+    tabItems.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabType = tab.getAttribute('data-tab');
+            
+            // 移除所有active类
+            tabItems.forEach(item => item.classList.remove('active'));
+            // 添加active类到当前tab
+            tab.classList.add('active');
+            
+            // 切换内容显示
+            if (tabType === 'map') {
+                mapContent.classList.add('active');
+                calendarContent.classList.remove('active');
+                console.log('切换到Map');
+            } else if (tabType === 'calendar') {
+                mapContent.classList.remove('active');
+                calendarContent.classList.add('active');
+                console.log('切换到Calendar');
+            }
+        });
+    });
+}
+
 // 页面加载完成后初始化动画
 document.addEventListener('DOMContentLoaded', function() {
     // 启动翻页时钟动画
     initFlipClockAnimation();
+    
+    // 初始化Tab切换器
+    initTabSwitcher();
     
     // 为需要动画的元素添加观察器
     const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-text');
