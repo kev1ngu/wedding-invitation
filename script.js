@@ -171,6 +171,7 @@ function initTabSwitcher() {
     const tabItems = document.querySelectorAll('.tab-item');
     const mapContent = document.getElementById('map-content');
     const calendarContent = document.getElementById('calendar-content');
+    const brushPath = document.querySelector('.brush-path');
     
     // 确保初始状态正确
     mapContent.classList.add('active');
@@ -194,6 +195,14 @@ function initTabSwitcher() {
                 mapContent.classList.remove('active');
                 calendarContent.classList.add('active');
                 console.log('切换到Calendar');
+                
+                // 触发手写毛笔动画
+                if (brushPath) {
+                    brushPath.style.animation = 'none';
+                    setTimeout(() => {
+                        brushPath.style.animation = 'drawBrush 2.5s ease-in-out forwards';
+                    }, 100);
+                }
             }
         });
     });
