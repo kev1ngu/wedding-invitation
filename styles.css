@@ -357,8 +357,8 @@ main {
 
 
 
-/* 婚礼仪式 */
-.ceremony-section {
+/* 地图section */
+.map-section {
     height: 100vh;
     display: flex;
     align-items: center;
@@ -366,13 +366,27 @@ main {
     scroll-snap-align: start;
 }
 
-/* 婚礼仪式卡片布局 */
-.ceremony-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    max-width: 1000px;
+.map-section .container {
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* 日历section */
+.calendar-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    scroll-snap-align: start;
+}
+
+.calendar-section .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
 }
 
 /* 地图卡片 */
@@ -382,6 +396,8 @@ main {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .map-card:hover {
@@ -390,14 +406,42 @@ main {
 }
 
 .map-view {
-    background: linear-gradient(135deg, #FFA726, #FF9800);
-    height: 200px;
+    background: linear-gradient(135deg, 
+        rgba(255, 167, 38, 0.2) 0%, 
+        rgba(255, 152, 0, 0.3) 50%, 
+        rgba(255, 167, 38, 0.2) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 24px;
     font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.map-view::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    animation: liquidFlow 3s linear infinite;
+    transform: rotate(45deg);
 }
 
 .location-info {
@@ -453,6 +497,8 @@ main {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .calendar-card:hover {
@@ -461,14 +507,43 @@ main {
 }
 
 .calendar-view {
-    background: linear-gradient(135deg, #FFA726, #FF9800);
-    height: 200px;
+    background: linear-gradient(135deg, 
+        rgba(255, 167, 38, 0.2) 0%, 
+        rgba(255, 152, 0, 0.3) 50%, 
+        rgba(255, 167, 38, 0.2) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 24px;
     font-weight: 600;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.calendar-view::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    animation: liquidFlow 3s linear infinite;
+    transform: rotate(45deg);
+    animation-delay: 1.5s;
 }
 
 .time-info {
@@ -664,15 +739,20 @@ main {
         font-size: 36px;
     }
     
-    /* 婚礼仪式响应式 */
-    .ceremony-cards {
-        grid-template-columns: 1fr;
-        gap: 30px;
+    /* 地图和日历section响应式 */
+    .map-section .container,
+    .calendar-section .container {
+        padding: 0 20px;
+    }
+    
+    .map-card,
+    .calendar-card {
+        max-width: 100%;
     }
     
     .map-view,
     .calendar-view {
-        height: 150px;
+        height: 180px;
         font-size: 20px;
     }
     
