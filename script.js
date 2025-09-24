@@ -250,6 +250,136 @@ function initAvatarAnimation() {
     avatarObserver.observe(avatarGroup);
 }
 
+// 幻灯片功能
+function initSlideshow() {
+    const slides = document.querySelectorAll('.slide');
+    const indicators = document.querySelectorAll('.indicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    if (!slides.length || !indicators.length) return;
+    
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+    
+    // 显示指定幻灯片
+    function showSlide(index) {
+        // 移除所有active类
+        slides.forEach(slide => slide.classList.remove('active', 'prev'));
+        indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // 添加active类到当前幻灯片
+        slides[index].classList.add('active');
+        indicators[index].classList.add('active');
+        
+        // 设置前一个幻灯片为prev状态
+        const prevIndex = index === 0 ? totalSlides - 1 : index - 1;
+        slides[prevIndex].classList.add('prev');
+        
+        currentSlide = index;
+    }
+    
+    // 下一张幻灯片
+    function nextSlide() {
+        const nextIndex = (currentSlide + 1) % totalSlides;
+        showSlide(nextIndex);
+    }
+    
+    // 上一张幻灯片
+    function prevSlide() {
+        const prevIndex = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1;
+        showSlide(prevIndex);
+    }
+    
+    // 绑定事件
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    
+    // 绑定指示器点击事件
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => showSlide(index));
+    });
+    
+    // 键盘导航
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+        }
+    });
+    
+    // 自动播放（可选）
+    let autoPlayInterval;
+    
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, 5000); // 5秒切换一次
+    }
+    
+    function stopAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+    
+    // 鼠标悬停时暂停自动播放
+    const slideshowContainer = document.querySelector('.slideshow-container');
+    if (slideshowContainer) {
+        slideshowContainer.addEventListener('mouseenter', stopAutoPlay);
+        slideshowContainer.addEventListener('mouseleave', startAutoPlay);
+    }
+    
+    // 开始自动播放
+    startAutoPlay();
+    
+    console.log('幻灯片初始化完成');
+}
+
+// 倒计时功能
+function initCountdown() {
+    const daysElement = document.getElementById('days');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
+    
+    if (!daysElement || !hoursElement || !minutesElement || !secondsElement) return;
+    
+    // 目标日期：2025年10月25日 11:28 AM
+    const targetDate = new Date('2025-10-25T11:28:00');
+    
+    function updateCountdown() {
+        const now = new Date();
+        const timeLeft = targetDate - now;
+        
+        if (timeLeft <= 0) {
+            // 倒计时结束
+            daysElement.textContent = '00';
+            hoursElement.textContent = '00';
+            minutesElement.textContent = '00';
+            secondsElement.textContent = '00';
+            return;
+        }
+        
+        // 计算剩余时间
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        
+        // 更新显示
+        daysElement.textContent = days.toString().padStart(2, '0');
+        hoursElement.textContent = hours.toString().padStart(2, '0');
+        minutesElement.textContent = minutes.toString().padStart(2, '0');
+        secondsElement.textContent = seconds.toString().padStart(2, '0');
+    }
+    
+    // 立即更新一次
+    updateCountdown();
+    
+    // 每秒更新
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    
+    console.log('倒计时初始化完成，目标时间：2025年10月25日 11:28 AM');
+}
+
 // 页面加载完成后初始化动画
 document.addEventListener('DOMContentLoaded', function() {
     // 启动翻页时钟动画
@@ -260,6 +390,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化Avatar滚动动画
     initAvatarAnimation();
+    
+    // 初始化倒计时
+    initCountdown();
     
     // 为需要动画的元素添加观察器
     const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-text');
