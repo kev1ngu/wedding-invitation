@@ -502,12 +502,18 @@ main {
     object-fit: contain;
 }
 
+/* CSS变量：计算精确的动画参数 */
+:root {
+    --animation-duration: 60s;
+    --diagonal-distance: calc(100vw + 100vh);
+}
+
 /* 照片1：从左上角向右下角滚动，向下倾斜15度 */
 .photo-1 {
     top: 0;
     left: 0;
     transform: translate(-100%, -100%) rotate(15deg);
-    animation: scrollDiagonal1 24s linear infinite;
+    animation: scrollDiagonal1 var(--animation-duration) linear infinite;
     animation-delay: 0s;
 }
 
@@ -516,27 +522,65 @@ main {
     bottom: 0;
     left: 0;
     transform: translate(-100%, 100%) rotate(-15deg);
-    animation: scrollDiagonal2 24s linear infinite;
+    animation: scrollDiagonal2 var(--animation-duration) linear infinite;
     animation-delay: 2s;
 }
 
-/* 照片1滚动动画：左上角到右下角，向下倾斜15度 */
+/* 照片1滚动动画：精确计算确保无缝连接 */
 @keyframes scrollDiagonal1 {
     0% {
         transform: translate(-100%, -100%) rotate(15deg);
     }
     100% {
-        transform: translate(100vw, 100vh) rotate(15deg);
+        transform: translate(calc(100vw + 100%), calc(100vh + 100%)) rotate(15deg);
     }
 }
 
-/* 照片2滚动动画：左下角到右上角，向上倾斜15度 */
+/* 照片2滚动动画：精确计算确保无缝连接 */
 @keyframes scrollDiagonal2 {
     0% {
         transform: translate(-100%, 100%) rotate(-15deg);
     }
     100% {
-        transform: translate(100vw, -100vh) rotate(-15deg);
+        transform: translate(calc(100vw + 100%), calc(-100vh - 100%)) rotate(-15deg);
+    }
+}
+
+/* 照片1副本：无缝连接 */
+.photo-1-copy {
+    top: 0;
+    left: 0;
+    transform: translate(-100%, -100%) rotate(15deg);
+    animation: scrollDiagonal1Copy var(--animation-duration) linear infinite;
+    animation-delay: calc(var(--animation-duration) / 2); /* 延迟一半时间 */
+}
+
+/* 照片2副本：无缝连接 */
+.photo-2-copy {
+    bottom: 0;
+    left: 0;
+    transform: translate(-100%, 100%) rotate(-15deg);
+    animation: scrollDiagonal2Copy var(--animation-duration) linear infinite;
+    animation-delay: calc(var(--animation-duration) / 2 + 2s); /* 延迟一半时间+2秒 */
+}
+
+/* 照片1副本滚动动画：无缝连接 */
+@keyframes scrollDiagonal1Copy {
+    0% {
+        transform: translate(-100%, -100%) rotate(15deg);
+    }
+    100% {
+        transform: translate(calc(100vw + 100%), calc(100vh + 100%)) rotate(15deg);
+    }
+}
+
+/* 照片2副本滚动动画：无缝连接 */
+@keyframes scrollDiagonal2Copy {
+    0% {
+        transform: translate(-100%, 100%) rotate(-15deg);
+    }
+    100% {
+        transform: translate(calc(100vw + 100%), calc(-100vh - 100%)) rotate(-15deg);
     }
 }
 
@@ -1662,26 +1706,14 @@ main {
 
 /* 幻灯片section响应式设计 */
 @media (max-width: 768px) {
-    .photo-1 {
-        animation-duration: 18s;
-        animation-delay: 0s;
-    }
-    
-    .photo-2 {
-        animation-duration: 18s;
-        animation-delay: 2s;
+    :root {
+        --animation-duration: 45s;
     }
 }
 
 @media (max-width: 480px) {
-    .photo-1 {
-        animation-duration: 15s;
-        animation-delay: 0s;
-    }
-    
-    .photo-2 {
-        animation-duration: 15s;
-        animation-delay: 2s;
+    :root {
+        --animation-duration: 36s;
     }
 }
 
