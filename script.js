@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCountdown();
     
     // 为需要动画的元素添加观察器
-    const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-text');
+    const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-tescrolling-photo photo-2t');
     
     animatedElements.forEach(el => {
         el.style.opacity = '0';
