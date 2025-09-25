@@ -502,36 +502,38 @@ main {
     object-fit: contain;
 }
 
-/* 照片1：从左上角斜45度向右下角滚动 */
+/* 照片1：从左上角向右下角滚动，向下倾斜15度 */
 .photo-1 {
     top: 0;
     left: 0;
-    transform: translate(-100%, -100%) rotate(45deg);
-    animation: scrollDiagonal1 16s linear infinite;
+    transform: translate(-100%, -100%) rotate(15deg);
+    animation: scrollDiagonal1 24s linear infinite;
+    animation-delay: 0s;
 }
 
-/* 照片2：从离底部20%位置从左向右向上斜15度滚动 */
+/* 照片2：从左下角向右上角滚动，向上倾斜15度 */
 .photo-2 {
-    bottom: 20%;
+    bottom: 0;
     left: 0;
-    transform: translate(-100%, 0) rotate(-15deg);
-    animation: scrollDiagonal2 20s linear infinite;
+    transform: translate(-100%, 100%) rotate(-15deg);
+    animation: scrollDiagonal2 24s linear infinite;
+    animation-delay: 2s;
 }
 
-/* 照片1滚动动画：左上角到右下角 */
+/* 照片1滚动动画：左上角到右下角，向下倾斜15度 */
 @keyframes scrollDiagonal1 {
     0% {
-        transform: translate(-100%, -100%) rotate(45deg);
+        transform: translate(-100%, -100%) rotate(15deg);
     }
     100% {
-        transform: translate(100vw, 100vh) rotate(45deg);
+        transform: translate(100vw, 100vh) rotate(15deg);
     }
 }
 
-/* 照片2滚动动画：左下角到右上角 */
+/* 照片2滚动动画：左下角到右上角，向上倾斜15度 */
 @keyframes scrollDiagonal2 {
     0% {
-        transform: translate(-100%, 0) rotate(-15deg);
+        transform: translate(-100%, 100%) rotate(-15deg);
     }
     100% {
         transform: translate(100vw, -100vh) rotate(-15deg);
@@ -1661,21 +1663,25 @@ main {
 /* 幻灯片section响应式设计 */
 @media (max-width: 768px) {
     .photo-1 {
-        animation-duration: 12s;
+        animation-duration: 18s;
+        animation-delay: 0s;
     }
     
     .photo-2 {
-        animation-duration: 16s;
+        animation-duration: 18s;
+        animation-delay: 2s;
     }
 }
 
 @media (max-width: 480px) {
     .photo-1 {
-        animation-duration: 10s;
+        animation-duration: 15s;
+        animation-delay: 0s;
     }
     
     .photo-2 {
-        animation-duration: 14s;
+        animation-duration: 15s;
+        animation-delay: 2s;
     }
 }
 
