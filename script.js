@@ -1,5 +1,74 @@
 
 
+// 字体加载检测功能
+function waitForFontLoad() {
+    return new Promise((resolve) => {
+        // 检查Font Loading API是否可用
+        if ('fonts' in document) {
+            // 使用Font Loading API
+            document.fonts.load('normal 72px Calmsie').then(() => {
+                console.log('Calmsie字体加载完成');
+                resolve();
+            }).catch(() => {
+                console.log('Font Loading API失败，使用备用方法');
+                // 如果Font Loading API失败，使用备用方法
+                fallbackFontCheck(resolve);
+            });
+        } else {
+            console.log('Font Loading API不支持，使用备用方法');
+            // 如果不支持Font Loading API，使用备用方法
+            fallbackFontCheck(resolve);
+        }
+    });
+}
+
+// 备用字体检测方法
+function fallbackFontCheck(callback) {
+    const testText = 'the wedding calls';
+    const fallbackFont = 'serif';
+    const customFont = 'Calmsie, serif';
+
+    // 创建测试元素
+    const testElement = document.createElement('div');
+    testElement.style.cssText = `
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+        font-size: 72px;
+        font-family: ${fallbackFont};
+        visibility: hidden;
+    `;
+    testElement.textContent = testText;
+    document.body.appendChild(testElement);
+
+    // 获取fallback字体的宽度
+    const fallbackWidth = testElement.offsetWidth;
+
+    // 切换到自定义字体
+    testElement.style.fontFamily = customFont;
+
+    let attempts = 0;
+    const maxAttempts = 50; // 最多检查5秒
+
+    function checkFont() {
+        attempts++;
+        const currentWidth = testElement.offsetWidth;
+
+        // 如果宽度发生变化，说明字体已加载
+        if (currentWidth !== fallbackWidth || attempts >= maxAttempts) {
+            document.body.removeChild(testElement);
+            console.log(`字体检测完成，尝试次数: ${attempts}`);
+            callback();
+            return;
+        }
+
+        // 继续检查
+        setTimeout(checkFont, 100);
+    }
+
+    checkFont();
+}
+
 // 翻页时钟动画控制 - 页面内嵌版本
 function initFlipClockAnimation() {
     const flipCards = document.querySelectorAll('.flip-card');
@@ -29,11 +98,17 @@ function initFlipClockAnimation() {
         }, delay);
     });
     
-    // 显示主标题 "the wedding calls"
-    setTimeout(() => {
-        mainTitle.classList.add('show');
-    }, 1500);
+    // 等待字体加载完成后再显示标题
+    waitForFontLoad().then(() => {
+        // 字体加载完成，先显示标题元素
+        mainTitle.classList.add('font-loaded');
     
+        // 延迟一下再执行显示动画，让翻页动画先完成
+        setTimeout(() => {
+            mainTitle.classList.add('show');
+        }, 800); // 等待翻页动画基本完成后再显示标题
+    });
+
     // 显示向下箭头并初始化功能
     setTimeout(() => {
         if (scrollArrow) {
@@ -380,6 +455,149 @@ function initCountdown() {
     console.log('倒计时初始化完成，目标时间：2025年10月25日 11:28 AM');
 }
 
+// 全页滚动增强功能
+function initFullPageScroll() {
+    const main = document.getElementById('main-content');
+    const sections = document.querySelectorAll('main > section');
+    
+    if (!main || !sections.length) return;
+    
+    let isScrolling = false;
+    let scrollTimeout;
+    
+    // 鼠标滚轮事件处理
+    function handleWheel(e) {
+        e.preventDefault();
+        
+        if (isScrolling) return;
+        
+        const currentScroll = main.scrollTop;
+        const sectionHeight = window.innerHeight;
+        const currentSectionIndex = Math.round(currentScroll / sectionHeight);
+        
+        let targetSection;
+        
+        if (e.deltaY > 0) {
+            // 向下滚动
+            targetSection = Math.min(currentSectionIndex + 1, sections.length - 1);
+        } else {
+            // 向上滚动
+            targetSection = Math.max(currentSectionIndex - 1, 0);
+        }
+        
+        if (targetSection !== currentSectionIndex) {
+            isScrolling = true;
+            main.scrollTo({
+                top: targetSection * sectionHeight,
+                behavior: 'smooth'
+            });
+            
+            // 重置滚动状态
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 1000);
+        }
+    }
+    
+    // 触摸滑动处理
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    function handleTouchStart(e) {
+        touchStartY = e.touches[0].clientY;
+    }
+    
+    function handleTouchEnd(e) {
+        touchEndY = e.changedTouches[0].clientY;
+        const deltaY = touchStartY - touchEndY;
+        const minSwipeDistance = 50;
+        
+        if (Math.abs(deltaY) > minSwipeDistance && !isScrolling) {
+            const currentScroll = main.scrollTop;
+            const sectionHeight = window.innerHeight;
+            const currentSectionIndex = Math.round(currentScroll / sectionHeight);
+            
+            let targetSection;
+            
+            if (deltaY > 0) {
+                // 向上滑动（显示下一页）
+                targetSection = Math.min(currentSectionIndex + 1, sections.length - 1);
+            } else {
+                // 向下滑动（显示上一页）
+                targetSection = Math.max(currentSectionIndex - 1, 0);
+            }
+            
+            if (targetSection !== currentSectionIndex) {
+                isScrolling = true;
+                main.scrollTo({
+                    top: targetSection * sectionHeight,
+                    behavior: 'smooth'
+                });
+                
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    isScrolling = false;
+                }, 1000);
+            }
+        }
+    }
+    
+    // 键盘导航
+    function handleKeydown(e) {
+        if (isScrolling) return;
+        
+        const currentScroll = main.scrollTop;
+        const sectionHeight = window.innerHeight;
+        const currentSectionIndex = Math.round(currentScroll / sectionHeight);
+        
+        let targetSection = currentSectionIndex;
+        
+        switch(e.key) {
+            case 'ArrowDown':
+            case 'PageDown':
+            case ' ': // 空格键
+                e.preventDefault();
+                targetSection = Math.min(currentSectionIndex + 1, sections.length - 1);
+                break;
+            case 'ArrowUp':
+            case 'PageUp':
+                e.preventDefault();
+                targetSection = Math.max(currentSectionIndex - 1, 0);
+                break;
+            case 'Home':
+                e.preventDefault();
+                targetSection = 0;
+                break;
+            case 'End':
+                e.preventDefault();
+                targetSection = sections.length - 1;
+                break;
+        }
+        
+        if (targetSection !== currentSectionIndex) {
+            isScrolling = true;
+            main.scrollTo({
+                top: targetSection * sectionHeight,
+                behavior: 'smooth'
+            });
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 1000);
+        }
+    }
+    
+    // 绑定事件监听器
+    main.addEventListener('wheel', handleWheel, { passive: false });
+    main.addEventListener('touchstart', handleTouchStart, { passive: true });
+    main.addEventListener('touchend', handleTouchEnd, { passive: true });
+    document.addEventListener('keydown', handleKeydown);
+    
+    console.log('全页滚动功能已初始化');
+}
+
 // 页面加载完成后初始化动画
 document.addEventListener('DOMContentLoaded', function() {
     // 启动翻页时钟动画
@@ -393,6 +611,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化倒计时
     initCountdown();
+    
+    // 初始化全页滚动
+    initFullPageScroll();
     
     // 为需要动画的元素添加观察器
     const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-tescrolling-photo photo-2t');
