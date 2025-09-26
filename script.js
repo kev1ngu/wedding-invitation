@@ -455,6 +455,149 @@ function initCountdown() {
     console.log('倒计时初始化完成，目标时间：2025年10月25日 11:28 AM');
 }
 
+// 全页滚动增强功能
+function initFullPageScroll() {
+    const main = document.getElementById('main-content');
+    const sections = document.querySelectorAll('main > section');
+    
+    if (!main || !sections.length) return;
+    
+    let isScrolling = false;
+    let scrollTimeout;
+    
+    // 鼠标滚轮事件处理
+    function handleWheel(e) {
+        e.preventDefault();
+        
+        if (isScrolling) return;
+        
+        const currentScroll = main.scrollTop;
+        const sectionHeight = window.innerHeight;
+        const currentSectionIndex = Math.round(currentScroll / sectionHeight);
+        
+        let targetSection;
+        
+        if (e.deltaY > 0) {
+            // 向下滚动
+            targetSection = Math.min(currentSectionIndex + 1, sections.length - 1);
+        } else {
+            // 向上滚动
+            targetSection = Math.max(currentSectionIndex - 1, 0);
+        }
+        
+        if (targetSection !== currentSectionIndex) {
+            isScrolling = true;
+            main.scrollTo({
+                top: targetSection * sectionHeight,
+                behavior: 'smooth'
+            });
+            
+            // 重置滚动状态
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 1000);
+        }
+    }
+    
+    // 触摸滑动处理
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    function handleTouchStart(e) {
+        touchStartY = e.touches[0].clientY;
+    }
+    
+    function handleTouchEnd(e) {
+        touchEndY = e.changedTouches[0].clientY;
+        const deltaY = touchStartY - touchEndY;
+        const minSwipeDistance = 50;
+        
+        if (Math.abs(deltaY) > minSwipeDistance && !isScrolling) {
+            const currentScroll = main.scrollTop;
+            const sectionHeight = window.innerHeight;
+            const currentSectionIndex = Math.round(currentScroll / sectionHeight);
+            
+            let targetSection;
+            
+            if (deltaY > 0) {
+                // 向上滑动（显示下一页）
+                targetSection = Math.min(currentSectionIndex + 1, sections.length - 1);
+            } else {
+                // 向下滑动（显示上一页）
+                targetSection = Math.max(currentSectionIndex - 1, 0);
+            }
+            
+            if (targetSection !== currentSectionIndex) {
+                isScrolling = true;
+                main.scrollTo({
+                    top: targetSection * sectionHeight,
+                    behavior: 'smooth'
+                });
+                
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    isScrolling = false;
+                }, 1000);
+            }
+        }
+    }
+    
+    // 键盘导航
+    function handleKeydown(e) {
+        if (isScrolling) return;
+        
+        const currentScroll = main.scrollTop;
+        const sectionHeight = window.innerHeight;
+        const currentSectionIndex = Math.round(currentScroll / sectionHeight);
+        
+        let targetSection = currentSectionIndex;
+        
+        switch(e.key) {
+            case 'ArrowDown':
+            case 'PageDown':
+            case ' ': // 空格键
+                e.preventDefault();
+                targetSection = Math.min(currentSectionIndex + 1, sections.length - 1);
+                break;
+            case 'ArrowUp':
+            case 'PageUp':
+                e.preventDefault();
+                targetSection = Math.max(currentSectionIndex - 1, 0);
+                break;
+            case 'Home':
+                e.preventDefault();
+                targetSection = 0;
+                break;
+            case 'End':
+                e.preventDefault();
+                targetSection = sections.length - 1;
+                break;
+        }
+        
+        if (targetSection !== currentSectionIndex) {
+            isScrolling = true;
+            main.scrollTo({
+                top: targetSection * sectionHeight,
+                behavior: 'smooth'
+            });
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                isScrolling = false;
+            }, 1000);
+        }
+    }
+    
+    // 绑定事件监听器
+    main.addEventListener('wheel', handleWheel, { passive: false });
+    main.addEventListener('touchstart', handleTouchStart, { passive: true });
+    main.addEventListener('touchend', handleTouchEnd, { passive: true });
+    document.addEventListener('keydown', handleKeydown);
+    
+    console.log('全页滚动功能已初始化');
+}
+
 // 页面加载完成后初始化动画
 document.addEventListener('DOMContentLoaded', function() {
     // 启动翻页时钟动画
@@ -468,6 +611,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化倒计时
     initCountdown();
+    
+    // 初始化全页滚动
+    initFullPageScroll();
     
     // 为需要动画的元素添加观察器
     const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-tescrolling-photo photo-2t');
