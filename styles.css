@@ -155,17 +155,48 @@ body {
     text-align: center;
     margin: 0;
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(50px) scale(0.8);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     letter-spacing: 2px;
     position: relative;
     z-index: 3;
-    transition: opacity 1s ease-out, transform 1s ease-out;
+    transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    visibility: hidden; /* 默认隐藏，直到字体加载完成 */
+}
+
+.wedding-title.font-loaded {
+    visibility: visible; /* 字体加载完成后显示 */
 }
 
 .wedding-title.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+}
+
+/* 添加闪烁光效 */
+.wedding-title.show::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    animation: titleShine 2s ease-in-out 1.5s;
+}
+
+@keyframes titleShine {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
 }
 
 /* 向下箭头 */
@@ -1461,19 +1492,44 @@ main {
 }
 
 /* 翻页时钟响应式设计 */
+/* 大屏幕 - 4个一行 (默认样式已设置) */
+
+/* 中等屏幕 - 保持4个一行，但缩小尺寸 */
+@media (max-width: 1024px) {
+    .flip-cards-container {
+        gap: 18px;
+    }
+
+    .flip-card {
+        width: 130px;
+        height: 130px;
+    }
+
+    .card-front,
+    .card-back {
+        font-size: 50px;
+    }
+}
+
+/* 平板端 - 2个一行 */
 @media (max-width: 768px) {
     .flip-cards-container {
-        gap: 15px;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 320px;
+        margin: 0 auto 60px;
     }
     
     .flip-card {
-        width: 120px;
-        height: 120px;
+        width: 140px;
+        height: 140px;
+        flex: 0 0 calc(50% - 10px);
     }
     
     .card-front,
     .card-back {
-        font-size: 45px;
+        font-size: 55px;
     }
     
     .wedding-title {
@@ -1489,21 +1545,44 @@ main {
     
 }
 
+/* 小屏幕平板 - 2个一行，进一步缩小 */
+@media (max-width: 640px) {
+    .flip-cards-container {
+        gap: 15px;
+        max-width: 280px;
+    }
+
+    .flip-card {
+        width: 120px;
+        height: 120px;
+        flex: 0 0 calc(50% - 7.5px);
+    }
+
+    .card-front,
+    .card-back {
+        font-size: 45px;
+    }
+}
+
+/* 手机端 - 保持2个一行 */
 @media (max-width: 480px) {
     .flip-cards-container {
-        gap: 10px;
+        gap: 12px;
         flex-wrap: wrap;
         justify-content: center;
+        max-width: 260px;
+        margin: 0 auto 60px;
     }
     
     .flip-card {
-        width: 100px;
-        height: 100px;
+        width: 110px;
+        height: 110px;
+        flex: 0 0 calc(50% - 6px);
     }
     
     .card-front,
     .card-back {
-        font-size: 35px;
+        font-size: 40px;
     }
     
     .wedding-title {
@@ -1516,6 +1595,30 @@ main {
         transform: translateY(0);
     }
     
+}
+
+/* 超小屏幕 - 仍保持2个一行，进一步缩小 */
+@media (max-width: 360px) {
+    .flip-cards-container {
+        gap: 10px;
+        max-width: 230px;
+    }
+
+    .flip-card {
+        width: 100px;
+        height: 100px;
+        flex: 0 0 calc(50% - 5px);
+    }
+
+    .card-front,
+    .card-back {
+        font-size: 35px;
+    }
+
+    .wedding-title {
+        font-size: 32px;
+        letter-spacing: 0.3px;
+    }
 }
 
 /* 响应式设计 */

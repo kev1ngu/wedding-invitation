@@ -21,12 +21,14 @@
             src: url('fonts/MISTRAL.TTF') format('truetype');
             font-weight: normal;
             font-style: normal;
+            font-display: swap; /* 允许fallback字体显示，直到自定义字体加载完成 */
         }
         @font-face {
             font-family: 'Calmsie';
             src: url('fonts/Calmsie.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
+            font-display: block; /* 阻止显示直到字体加载完成，配合JS控制 */
         }
     </style>
 </head>

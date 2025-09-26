@@ -1,5 +1,74 @@
 
 
+// 字体加载检测功能
+function waitForFontLoad() {
+    return new Promise((resolve) => {
+        // 检查Font Loading API是否可用
+        if ('fonts' in document) {
+            // 使用Font Loading API
+            document.fonts.load('normal 72px Calmsie').then(() => {
+                console.log('Calmsie字体加载完成');
+                resolve();
+            }).catch(() => {
+                console.log('Font Loading API失败，使用备用方法');
+                // 如果Font Loading API失败，使用备用方法
+                fallbackFontCheck(resolve);
+            });
+        } else {
+            console.log('Font Loading API不支持，使用备用方法');
+            // 如果不支持Font Loading API，使用备用方法
+            fallbackFontCheck(resolve);
+        }
+    });
+}
+
+// 备用字体检测方法
+function fallbackFontCheck(callback) {
+    const testText = 'the wedding calls';
+    const fallbackFont = 'serif';
+    const customFont = 'Calmsie, serif';
+
+    // 创建测试元素
+    const testElement = document.createElement('div');
+    testElement.style.cssText = `
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+        font-size: 72px;
+        font-family: ${fallbackFont};
+        visibility: hidden;
+    `;
+    testElement.textContent = testText;
+    document.body.appendChild(testElement);
+
+    // 获取fallback字体的宽度
+    const fallbackWidth = testElement.offsetWidth;
+
+    // 切换到自定义字体
+    testElement.style.fontFamily = customFont;
+
+    let attempts = 0;
+    const maxAttempts = 50; // 最多检查5秒
+
+    function checkFont() {
+        attempts++;
+        const currentWidth = testElement.offsetWidth;
+
+        // 如果宽度发生变化，说明字体已加载
+        if (currentWidth !== fallbackWidth || attempts >= maxAttempts) {
+            document.body.removeChild(testElement);
+            console.log(`字体检测完成，尝试次数: ${attempts}`);
+            callback();
+            return;
+        }
+
+        // 继续检查
+        setTimeout(checkFont, 100);
+    }
+
+    checkFont();
+}
+
 // 翻页时钟动画控制 - 页面内嵌版本
 function initFlipClockAnimation() {
     const flipCards = document.querySelectorAll('.flip-card');
@@ -29,11 +98,17 @@ function initFlipClockAnimation() {
         }, delay);
     });
     
-    // 显示主标题 "the wedding calls"
-    setTimeout(() => {
-        mainTitle.classList.add('show');
-    }, 1500);
+    // 等待字体加载完成后再显示标题
+    waitForFontLoad().then(() => {
+        // 字体加载完成，先显示标题元素
+        mainTitle.classList.add('font-loaded');
     
+        // 延迟一下再执行显示动画，让翻页动画先完成
+        setTimeout(() => {
+            mainTitle.classList.add('show');
+        }, 800); // 等待翻页动画基本完成后再显示标题
+    });
+
     // 显示向下箭头并初始化功能
     setTimeout(() => {
         if (scrollArrow) {
