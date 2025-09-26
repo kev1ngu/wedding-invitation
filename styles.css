@@ -1083,12 +1083,14 @@ main {
     padding: 30px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
+    text-align: center; /* 内容居中对齐 */
 }
 
 .time-item {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* 居中排列 */
     align-items: center;
+    gap: 12px; /* 标签与内容的间距 */
     padding: 20px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -1609,6 +1611,15 @@ main {
     
 }
 
+/* 移动端：让日历卡片宽度为上方日历图片的 75% 并居中 */
+@media (max-width: 768px) {
+    .map-section #calendar-content .calendar-view-container {
+        width: 75% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
 /* 超小屏幕 - 仍保持2个一行，进一步缩小 */
 @media (max-width: 360px) {
     .flip-cards-container {
@@ -1778,7 +1789,7 @@ main {
         top: auto !important;
         transform: none !important;
         width: 100% !important;
-        height: 200px !important;
+        height: 280px !important; /* 提大移动端图片容器高度，提升可视尺寸 */
         order: 1;
         margin: 20px 0 35px 0 !important; /* 增加上下间距 */
         border-radius: 15px;
@@ -1930,7 +1941,7 @@ main {
 
     .map-section .location-image-container,
     .map-section .calendar-image-container {
-        height: 200px;
+        height: 260px; /* 手机端略小于平板，但仍较原先更大 */
         margin: 15px 0 30px 0 !important; /* 增加上下间距 */
         border: 1px solid rgba(0, 0, 0, 0.1) !important; /* 确保手机端也有边框 */
         background: rgba(255, 255, 255, 0.05) !important; /* 添加淡背景色 */

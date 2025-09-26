@@ -892,3 +892,141 @@ function initScrollArrowLogic(arrow) {
     });
 }
 
+// 解析 object-position 为 [0..1] 比例
+function parseObjectPosition(op) {
+    let posX = 0.5, posY = 0.5; // 默认 center center
+    if (!op) return { posX, posY };
+    const tokens = op.trim().split(/\s+/);
+    const mapX = { left: 0, center: 0.5, right: 1 };
+    const mapY = { top: 0, center: 0.5, bottom: 1 };
+
+    function tokenToFrac(token, axis) {
+        const lower = token.toLowerCase();
+        if (lower.endsWith('%')) {
+            const v = parseFloat(lower);
+            if (!isNaN(v)) return Math.min(Math.max(v / 100, 0), 1);
+        }
+        if (axis === 'x' && lower in mapX) return mapX[lower];
+        if (axis === 'y' && lower in mapY) return mapY[lower];
+        return 0.5;
+    }
+
+    if (tokens.length === 1) {
+        const f = tokenToFrac(tokens[0], 'x');
+        return { posX: f, posY: f };
+    } else {
+        return { posX: tokenToFrac(tokens[0], 'x'), posY: tokenToFrac(tokens[1], 'y') };
+    }
+}
+
+// 将原图坐标映射到 cover/contain 渲染后的容器坐标
+function mapPointForObjectFit(imgEl, px, py) {
+    if (!imgEl) return null;
+    const rect = imgEl.getBoundingClientRect();
+    const cw = rect.width, ch = rect.height;
+    const iw = imgEl.naturalWidth, ih = imgEl.naturalHeight;
+    if (!cw || !ch || !iw || !ih) return null;
+
+    const cs = getComputedStyle(imgEl);
+    const fit = (cs.objectFit || 'fill').toLowerCase();
+    const { posX, posY } = parseObjectPosition(cs.objectPosition || '50% 50%');
+
+    let scale;
+    if (fit === 'cover') {
+        scale = Math.max(cw / iw, ch / ih);
+    } else if (fit === 'contain') {
+        scale = Math.min(cw / iw, ch / ih);
+    } else {
+        // 简化：其他fit按contain处理
+        scale = Math.min(cw / iw, ch / ih);
+    }
+
+    const renderedW = iw * scale;
+    const renderedH = ih * scale;
+    const offsetX = (cw - renderedW) * posX;
+    const offsetY = (ch - renderedH) * posY;
+
+    const localX = offsetX + px * scale;
+    const localY = offsetY + py * scale;
+
+    return {
+        rect,
+        cw, ch, iw, ih,
+        scale,
+        renderedW, renderedH,
+        offsetX, offsetY,
+        localX, localY,
+        viewportLeft: rect.left + localX,
+        viewportTop: rect.top + localY,
+        documentLeft: rect.left + localX + window.scrollX,
+        documentTop: rect.top + localY + window.scrollY,
+        visible: localX >= 0 && localX <= cw && localY >= 0 && localY <= ch,
+    };
+}
+
+// 日历：让红圈跟随原图上的固定点（支持 object-fit: cover / object-position）
+function initCalendarCoverCircle() {
+    const container = document.querySelector('.calendar-image-container');
+    const img = container?.querySelector('.calendar-image');
+    const circle = container?.querySelector('.hand-drawn-circle');
+    if (!container || !img || !circle) return;
+
+    // 支持 data- 属性，否则用你提供的水平比值 1420/1920
+    const ratioX = 1480 / 1920; // 若有 data-circle-x 则按像素覆盖
+    const dataX = img.getAttribute('data-circle-x');
+    const dataY = img.getAttribute('data-circle-y');
+    const dataD = img.getAttribute('data-circle-diameter');
+    const dataDyMobile = img.getAttribute('data-circle-dy-mobile'); // 移动端额外下移（原图像素）
+
+    const getRef = () => {
+        const iw = img.naturalWidth || 0;
+        const ih = img.naturalHeight || 0;
+        // 优先像素，其次按比例
+        const x = dataX != null ? parseFloat(dataX) : (iw ? ratioX * iw : 0);
+        const y = dataY != null ? parseFloat(dataY) : null; // 若没给y，则仅横向对齐
+        const d = dataD != null ? parseFloat(dataD) : 200; // 默认按原图120像素直径做等比缩放
+        const dyMobile = dataDyMobile != null ? parseFloat(dataDyMobile) : 0;
+        return { x, y, d, iw, ih, dyMobile };
+    };
+
+    const place = () => {
+        if (!img.complete || !img.naturalWidth || !img.naturalHeight) return;
+
+    const ref = getRef();
+    const isMobile = window.matchMedia('(max-width: 767.98px)').matches;
+    const yForMap = (ref.y != null ? ref.y : 0) + (isMobile ? ref.dyMobile : 0);
+    const mapped = mapPointForObjectFit(img, ref.x, yForMap);
+        if (!mapped) return;
+
+        const containerRect = container.getBoundingClientRect();
+        // 绝对定位到容器坐标
+        const cx = mapped.viewportLeft - containerRect.left;
+        const shouldSetTop = (ref.y != null) || (isMobile && ref.dyMobile !== 0);
+        const cy = shouldSetTop ? (mapped.viewportTop - containerRect.top) : null;
+
+        circle.style.left = `${cx}px`;
+    if (cy != null) circle.style.top = `${cy}px`;
+        // 直径随比例缩放（移动端和桌面端都生效）
+        const dia = ref.d * mapped.scale;
+        circle.style.width = `${dia}px`;
+        circle.style.height = `${dia}px`;
+        circle.style.transform = 'translate(-50%, -50%)';
+    };
+
+    const debouncedPlace = debounce(place, 50);
+    window.addEventListener('resize', debouncedPlace);
+    if (!img.complete) img.addEventListener('load', debouncedPlace, { once: true });
+
+    // 切换到Calendar时重新计算
+    const calendarTab = document.querySelector('.tab-item[data-tab="calendar"]');
+    if (calendarTab) calendarTab.addEventListener('click', () => setTimeout(debouncedPlace, 220));
+
+    // 初次放置
+    setTimeout(place, 0);
+}
+
+// 启动日历红圈跟随
+document.addEventListener('DOMContentLoaded', () => {
+    initCalendarCoverCircle();
+});
+
