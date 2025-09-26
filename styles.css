@@ -1077,7 +1077,6 @@ main {
     padding: 30px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    text-align: center; /* 内容居中对齐 */
 }
 
 .time-item {
@@ -1277,6 +1276,7 @@ main {
     display: flex;
     gap: 15px;
     align-items: center;
+    justify-content: flex-end; /* 右对齐按钮组 */
 }
 
 .location-item:last-of-type {
@@ -1570,6 +1570,11 @@ main {
     .card-back {
         font-size: 45px;
     }
+    
+    /* 小屏幕平板按钮组右对齐 */
+    .button-group {
+        justify-content: flex-end;
+    }
 }
 
 /* 手机端 - 保持2个一行 */
@@ -1611,6 +1616,11 @@ main {
         width: 75% !important;
         margin-left: auto !important;
         margin-right: auto !important;
+    }
+    
+    /* 平板端按钮组右对齐 */
+    .button-group {
+        justify-content: flex-end;
     }
 }
 
@@ -1966,8 +1976,9 @@ main {
     }
 
     .location-item {
-        flex-direction: column;
-        align-items: flex-start;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         gap: 12px;
         padding: 20px 0;
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -1997,22 +2008,24 @@ main {
 
     .button-group {
         display: flex;
-        flex-direction: column;
-        gap: 12px;
-        width: 100%;
-        margin-top: 8px;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        justify-content: flex-end; /* 右对齐按钮组 */
     }
 
     .location-action,
     .time-action {
-        width: 100%;
+        width: auto; /* 移动端按钮自适应宽度 */
         justify-content: center;
-        padding: 14px 20px;
-        font-size: 15px;
-        border-radius: 25px;
+        padding: 8px 12px;
+        font-size: 12px;
+        border-radius: 15px;
         text-decoration: none;
         font-weight: 500;
         transition: all 0.3s ease;
+        min-width: 80px; /* 设置最小宽度 */
+        white-space: nowrap;
     }
 
     /* 倒计时响应式设计 */
@@ -2263,6 +2276,23 @@ main {
 
     .countdown-date {
         font-size: 14px;
+    }
+    
+    /* 超小屏幕按钮组右对齐 */
+    .button-group {
+        flex-direction: row;
+        gap: 6px;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    
+    .location-action,
+    .time-action {
+        width: auto;
+        min-width: 70px;
+        padding: 6px 10px;
+        font-size: 11px;
+        border-radius: 12px;
     }
 }
 
