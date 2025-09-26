@@ -1030,3 +1030,31 @@ document.addEventListener('DOMContentLoaded', () => {
     initCalendarCoverCircle();
 });
 
+// 幻灯片section滚动触发动画
+function initSlideshowScrollTrigger() {
+    const slideshowSection = document.querySelector('.slideshow-section');
+    if (!slideshowSection) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 当section进入视口时，添加in-view类
+                entry.target.classList.add('in-view');
+            } else {
+                // 当section离开视口时，移除in-view类（可选）
+                // entry.target.classList.remove('in-view');
+            }
+        });
+    }, {
+        threshold: 0.3, // 当30%的section可见时触发
+        rootMargin: '0px 0px -10% 0px' // 提前10%触发
+    });
+
+    observer.observe(slideshowSection);
+}
+
+// 启动幻灯片滚动触发
+document.addEventListener('DOMContentLoaded', () => {
+    initSlideshowScrollTrigger();
+});
+
