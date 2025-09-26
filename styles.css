@@ -1083,12 +1083,14 @@ main {
     padding: 30px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
+    text-align: center; /* 内容居中对齐 */
 }
 
 .time-item {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* 居中排列 */
     align-items: center;
+    gap: 12px; /* 标签与内容的间距 */
     padding: 20px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -1607,6 +1609,15 @@ main {
         transform: translateY(0);
     }
     
+}
+
+/* 移动端：让日历卡片宽度为上方日历图片的 75% 并居中 */
+@media (max-width: 768px) {
+    .map-section #calendar-content .calendar-view-container {
+        width: 75% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
 }
 
 /* 超小屏幕 - 仍保持2个一行，进一步缩小 */
