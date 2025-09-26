@@ -1778,7 +1778,7 @@ main {
         top: auto !important;
         transform: none !important;
         width: 100% !important;
-        height: 200px !important;
+        height: 280px !important; /* 提大移动端图片容器高度，提升可视尺寸 */
         order: 1;
         margin: 20px 0 35px 0 !important; /* 增加上下间距 */
         border-radius: 15px;
@@ -1930,7 +1930,7 @@ main {
 
     .map-section .location-image-container,
     .map-section .calendar-image-container {
-        height: 200px;
+        height: 260px; /* 手机端略小于平板，但仍较原先更大 */
         margin: 15px 0 30px 0 !important; /* 增加上下间距 */
         border: 1px solid rgba(0, 0, 0, 0.1) !important; /* 确保手机端也有边框 */
         background: rgba(255, 255, 255, 0.05) !important; /* 添加淡背景色 */
