@@ -1979,22 +1979,33 @@ main {
     }
     
     .countdown-title {
-        font-size: 36px;
+        font-size: clamp(42px, 10vw, 56px);
         margin-bottom: 30px;
         line-height: 1.2;
+        white-space: nowrap;
     }
     
     .countdown-timer {
+        display: flex;
         justify-content: center;
-        gap: 15px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
+        gap: 40px;
+        margin-bottom: 40px;
+        flex-wrap: nowrap;
     }
 
     .time-unit {
-        padding: 15px 10px;
-        min-width: 70px;
-        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 30px 20px;
+        min-width: 120px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
     }
 
     .time-number {
@@ -2003,10 +2014,105 @@ main {
 
     .time-label {
         font-size: 12px;
+        font-weight: 600;
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), 
+                     0 0 8px rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.25);
+        padding: 2px 6px;
+        border-radius: 6px;
+        backdrop-filter: blur(5px);
     }
 
     .countdown-date {
         font-size: 16px;
+    }
+}
+
+/* 倒计时响应式设计 - 参考第一个section的实现方式 */
+/* 中等屏幕 - 保持4个一行，但缩小尺寸 */
+@media (max-width: 1024px) {
+    .countdown-timer {
+        gap: 35px;
+    }
+
+    .time-unit {
+        padding: 25px 15px;
+        min-width: 100px;
+    }
+}
+
+/* 平板端 - 尝试更紧凑的4个一行，但很快会切换到2x2 */
+@media (max-width: 1000px) and (min-width: 801px) {
+    .countdown-timer {
+        gap: 25px;
+    }
+
+    .time-unit {
+        padding: 18px 10px;
+        min-width: 80px;
+    }
+}
+
+/* 小屏幕 - 当4个一行太挤时，切换到2x2布局 */
+@media (max-width: 800px) {
+    .countdown-timer {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        gap: 20px !important;
+        width: 100% !important;
+        max-width: 400px !important;
+        margin: 0 auto 40px !important;
+    }
+    
+    .time-unit {
+        flex: 0 0 auto !important;
+        width: calc(50% - 20px) !important;
+        min-width: 120px !important;
+        max-width: 180px !important;
+        padding: 20px 15px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* 手机端 - 保持2x2布局，进一步优化 */
+@media (max-width: 480px) {
+    .countdown-timer {
+        gap: 15px !important;
+        max-width: 350px !important;
+    }
+    
+    .time-unit {
+        width: calc(50% - 15px) !important;
+        min-width: 100px !important;
+        max-width: 160px !important;
+        padding: 18px 12px !important;
+    }
+    
+    .countdown-title {
+        font-size: clamp(26px, 6.5vw, 34px) !important;
+    }
+}
+
+/* 超小屏幕 - 最终优化 */
+@media (max-width: 360px) {
+    .countdown-timer {
+        gap: 12px !important;
+        max-width: 320px !important;
+    }
+
+    .time-unit {
+        width: calc(50% - 12px) !important;
+        min-width: 90px !important;
+        max-width: 140px !important;
+        padding: 15px 10px !important;
+    }
+    
+    .countdown-title {
+        font-size: clamp(22px, 6vw, 30px) !important;
     }
 }
 
@@ -2050,18 +2156,27 @@ main {
     }
     
     .countdown-title {
-        font-size: 28px;
+        font-size: clamp(20px, 6vw, 28px);
         margin-bottom: 20px;
+        white-space: nowrap;
     }
     
     .countdown-timer {
-        gap: 10px;
+        gap: 12px !important;
         margin-bottom: 15px;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        max-width: 320px !important;
+        margin: 0 auto 15px auto !important;
     }
 
     .time-unit {
-        padding: 12px 8px;
-        min-width: 60px;
+        padding: 15px 10px !important;
+        min-width: 90px !important;
+        flex: 0 0 auto !important;
+        max-width: 140px !important;
+        margin: 0 !important;
+        width: calc(50% - 12px) !important;
     }
 
     .time-number {
@@ -2070,6 +2185,14 @@ main {
 
     .time-label {
         font-size: 10px;
+        font-weight: 600;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 
+                     0 0 6px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.3);
+        padding: 1px 4px;
+        border-radius: 4px;
+        backdrop-filter: blur(3px);
     }
 
     .countdown-date {
@@ -2225,9 +2348,15 @@ main {
 
 .time-label {
     font-size: 18px;
-    font-weight: 500;
-    opacity: 0.9;
+    font-weight: 600;
+    color: #fff;
     letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 
+                 0 0 12px rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.25);
+    padding: 4px 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
 }
 
 .countdown-date {
