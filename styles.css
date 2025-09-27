@@ -203,6 +203,7 @@ body {
 .scroll-arrow {
     position: absolute;
     bottom: 40px;
+    bottom: calc(40px + env(safe-area-inset-bottom)); /* 考虑安全区域 */
     left: 50%;
     width: 50px;
     height: 50px;
@@ -2093,6 +2094,19 @@ main {
         font-size: 36px;
     }
     
+    /* 768px以下设备向下箭头调整 */
+    .scroll-arrow {
+        bottom: 25px; /* 减少底部距离 */
+        bottom: calc(25px + env(safe-area-inset-bottom)); /* 考虑安全区域 */
+        width: 45px; /* 缩小尺寸 */
+        height: 45px;
+        margin-left: -22.5px; /* 调整居中 */
+    }
+    
+    .arrow-icon {
+        font-size: 18px; /* 缩小图标 */
+    }
+    
     /* 地图section移动端完全重写 */
     .map-section {
         height: auto;
@@ -2308,8 +2322,17 @@ main {
 }
 
 @media (max-width: 480px) {
-    .hero-title {
-        font-size: 36px;
+    /* 移动端向下箭头调整 */
+    .scroll-arrow {
+        bottom: 20px; /* 减少底部距离 */
+        bottom: calc(20px + env(safe-area-inset-bottom)); /* 考虑安全区域 */
+        width: 40px; /* 缩小尺寸 */
+        height: 40px;
+        margin-left: -20px; /* 调整居中 */
+    }
+    
+    .arrow-icon {
+        font-size: 16px; /* 缩小图标 */
     }
     
     .hero-subtitle {

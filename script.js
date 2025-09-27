@@ -1058,6 +1058,40 @@ document.addEventListener('DOMContentLoaded', () => {
     initSlideshowScrollTrigger();
 });
 
+// 向下箭头滚动行为
+function initScrollArrow() {
+    const scrollArrow = document.querySelector('.scroll-arrow');
+    const main = document.querySelector('main');
+    
+    if (!scrollArrow || !main) return;
+    
+    scrollArrow.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        // 获取下一个section
+        const currentSection = scrollArrow.closest('section');
+        const nextSection = currentSection?.nextElementSibling;
+        
+        if (nextSection) {
+            // 计算目标位置，考虑安全区域
+            const rect = nextSection.getBoundingClientRect();
+            const scrollTop = main.scrollTop;
+            const targetTop = rect.top + scrollTop;
+            
+            // 平滑滚动到下一个section
+            main.scrollTo({
+                top: targetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
+
+// 启动向下箭头滚动
+document.addEventListener('DOMContentLoaded', () => {
+    initScrollArrow();
+});
+
 // 动态视口高度滚动优化
 function initDynamicViewportScroll() {
     const main = document.querySelector('main');
