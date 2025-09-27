@@ -1073,16 +1073,27 @@ function initScrollArrow() {
         const nextSection = currentSection?.nextElementSibling;
         
         if (nextSection) {
-            // 计算目标位置，考虑安全区域
-            const rect = nextSection.getBoundingClientRect();
-            const scrollTop = main.scrollTop;
-            const targetTop = rect.top + scrollTop;
+            // 临时禁用动态滚动优化
+            main.setAttribute('data-scroll-locked', 'true');
             
-            // 平滑滚动到下一个section
-            main.scrollTo({
-                top: targetTop,
-                behavior: 'smooth'
-            });
+            // 移动端使用scrollIntoView，桌面端使用scrollTo
+            if (window.innerWidth <= 768) {
+                nextSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            } else {
+                const nextSectionTop = nextSection.offsetTop;
+                main.scrollTo({
+                    top: nextSectionTop,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // 滚动完成后重新启用动态滚动优化
+            setTimeout(() => {
+                main.removeAttribute('data-scroll-locked');
+            }, 1000);
         }
     });
 }
@@ -1129,6 +1140,11 @@ function initDynamicViewportScroll() {
     // 监听滚动事件，优化滚动对齐
     let scrollTimeout;
     main.addEventListener('scroll', () => {
+        // 如果滚动被锁定（如向下箭头点击），跳过自动对齐
+        if (main.hasAttribute('data-scroll-locked')) {
+            return;
+        }
+        
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
             const scrollTop = main.scrollTop;
