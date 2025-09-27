@@ -384,26 +384,46 @@ function initSlideshow() {
         }
     });
     
-    // 自动播放（可选）
-    let autoPlayInterval;
+    // 自动播放控制
+    let autoPlayInterval = null;
+    let isAutoPlayActive = false;
     
     function startAutoPlay() {
-        autoPlayInterval = setInterval(nextSlide, 5000); // 5秒切换一次
+        if (!isAutoPlayActive) {
+            autoPlayInterval = setInterval(nextSlide, 5000); // 5秒切换一次
+            isAutoPlayActive = true;
+            console.log('幻灯片自动播放已启动');
+        }
     }
     
     function stopAutoPlay() {
-        clearInterval(autoPlayInterval);
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+            isAutoPlayActive = false;
+            console.log('幻灯片自动播放已停止');
+        }
     }
     
     // 鼠标悬停时暂停自动播放
     const slideshowContainer = document.querySelector('.slideshow-container');
     if (slideshowContainer) {
         slideshowContainer.addEventListener('mouseenter', stopAutoPlay);
-        slideshowContainer.addEventListener('mouseleave', startAutoPlay);
+        slideshowContainer.addEventListener('mouseleave', () => {
+            if (isAutoPlayActive) {
+                startAutoPlay();
+            }
+        });
     }
     
-    // 开始自动播放
-    startAutoPlay();
+    // 根据设备类型决定自动播放策略
+    if (window.innerWidth > 768) {
+        // 桌面端立即开始自动播放
+        startAutoPlay();
+    } else {
+        // 移动端等待滚动触发
+        console.log('移动端幻灯片等待滚动到section时触发');
+    }
     
     console.log('幻灯片初始化完成');
 }
@@ -614,6 +634,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化全页滚动
     initFullPageScroll();
+    
+    // 初始化幻灯片
+    initSlideshow();
     
     // 为需要动画的元素添加观察器
     const animatedElements = document.querySelectorAll('.ceremony-card, .timeline-item, .story-tescrolling-photo photo-2t');
@@ -1030,32 +1053,55 @@ document.addEventListener('DOMContentLoaded', () => {
     initCalendarCoverCircle();
 });
 
-// 幻灯片section滚动触发动画
-function initSlideshowScrollTrigger() {
+// 移动端滚动照片动画控制
+function initMobileScrollingPhotos() {
+    // 只在移动端执行
+    if (window.innerWidth > 768) return;
+    
     const slideshowSection = document.querySelector('.slideshow-section');
-    if (!slideshowSection) return;
-
+    if (!slideshowSection) {
+        console.log('未找到slideshow-section');
+        return;
+    }
+    
+    // 移动端初始化时暂停所有滚动照片动画
+    const scrollingPhotos = document.querySelectorAll('.scrolling-photo');
+    scrollingPhotos.forEach(photo => {
+        photo.style.animationPlayState = 'paused';
+        console.log('移动端暂停滚动照片动画');
+    });
+    
+    console.log('开始监听移动端slideshow-section滚动');
+    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // 当section进入视口时，添加in-view类
+                console.log('移动端检测到slideshow-section进入视口，开始滚动照片动画');
+                
+                // 添加in-view类
                 entry.target.classList.add('in-view');
-            } else {
-                // 当section离开视口时，移除in-view类（可选）
-                // entry.target.classList.remove('in-view');
+                
+                // 恢复滚动照片动画
+                scrollingPhotos.forEach(photo => {
+                    photo.style.animationPlayState = 'running';
+                    console.log('移动端开始滚动照片动画');
+                });
+                
+                // 启动后停止观察
+                observer.unobserve(slideshowSection);
             }
         });
     }, {
-        threshold: 0.3, // 当30%的section可见时触发
-        rootMargin: '0px 0px -10% 0px' // 提前10%触发
+        threshold: 0.5, // 50%可见时触发
+        rootMargin: '0px'
     });
 
     observer.observe(slideshowSection);
 }
 
-// 启动幻灯片滚动触发
+// 启动移动端滚动照片动画控制
 document.addEventListener('DOMContentLoaded', () => {
-    initSlideshowScrollTrigger();
+    initMobileScrollingPhotos();
 });
 
 // 向下箭头滚动行为
