@@ -293,6 +293,9 @@ main {
     overflow-y: scroll;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    /* 移动端滚动优化 */
+    scroll-padding-top: env(safe-area-inset-top);
+    scroll-padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* 首页横幅 */

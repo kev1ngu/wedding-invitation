@@ -1058,3 +1058,80 @@ document.addEventListener('DOMContentLoaded', () => {
     initSlideshowScrollTrigger();
 });
 
+// 动态视口高度滚动优化
+function initDynamicViewportScroll() {
+    const main = document.querySelector('main');
+    if (!main) return;
+
+    // 监听视口变化
+    function handleViewportChange() {
+        // 重新计算滚动位置
+        const currentScrollTop = main.scrollTop;
+        const viewportHeight = window.innerHeight;
+        
+        // 如果滚动位置接近某个section边界，调整到精确位置
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            const sectionTop = rect.top + currentScrollTop;
+            
+            // 如果当前滚动位置接近section顶部，精确对齐
+            if (Math.abs(currentScrollTop - sectionTop) < 50) {
+                main.scrollTo({
+                    top: sectionTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    }
+
+    // 监听视口变化事件
+    window.addEventListener('resize', handleViewportChange);
+    window.addEventListener('orientationchange', () => {
+        // 延迟处理，等待视口稳定
+        setTimeout(handleViewportChange, 100);
+    });
+
+    // 监听滚动事件，优化滚动对齐
+    let scrollTimeout;
+    main.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            const scrollTop = main.scrollTop;
+            const viewportHeight = window.innerHeight;
+            
+            // 找到最接近的section
+            const sections = document.querySelectorAll('section');
+            let closestSection = null;
+            let minDistance = Infinity;
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const sectionTop = rect.top + scrollTop;
+                const distance = Math.abs(scrollTop - sectionTop);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestSection = section;
+                }
+            });
+            
+            // 如果距离超过阈值，自动对齐到最近的section
+            if (closestSection && minDistance > 100) {
+                const rect = closestSection.getBoundingClientRect();
+                const sectionTop = rect.top + scrollTop;
+                
+                main.scrollTo({
+                    top: sectionTop,
+                    behavior: 'smooth'
+                });
+            }
+        }, 150);
+    });
+}
+
+// 启动动态视口滚动优化
+document.addEventListener('DOMContentLoaded', () => {
+    initDynamicViewportScroll();
+});
+
