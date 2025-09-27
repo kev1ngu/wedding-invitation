@@ -2409,7 +2409,7 @@ main {
         justify-content: center; /* 改为居中对齐 */
         align-items: center;
         gap: 10px; /* 12px * 0.8 = 10px */
-        padding: 16px 0; /* 20px * 0.8 = 16px */
+        padding: 11px 0; /* 16px * 0.7 = 11px，缩短30% */
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         flex-direction: column; /* 改为垂直布局 */
     }
@@ -2679,7 +2679,7 @@ main {
     .vinyl-record {
         width: 250px;
         height: 250px;
-        margin-bottom: 10px; /* 减少底部间距，让黑胶往上一点 */
+        margin-bottom: -40px; /* 向上移动50px：10px - 50px = -40px */
     }
     
     .vinyl-center {
@@ -2738,7 +2738,7 @@ main {
         justify-content: center;
         align-items: center;
         gap: 8px;
-        padding: 12px 0;
+        padding: 8px 0; /* 12px * 0.7 = 8px，缩短30% */
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         flex-direction: column;
     }
