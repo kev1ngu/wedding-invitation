@@ -17,6 +17,9 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    /* 移动端安全区域支持 */
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
 }
 
 
@@ -26,6 +29,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     scroll-snap-align: start;
 }
 
@@ -285,6 +289,7 @@ main {
     padding: 0;
     scroll-snap-type: y mandatory;
     height: 100vh;
+    height: 100dvh; /* 动态视口高度，考虑移动端UI */
     overflow-y: scroll;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
@@ -293,6 +298,7 @@ main {
 /* 首页横幅 */
 .hero-section {
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     display: flex;
     align-items: center;
     position: relative;
@@ -509,6 +515,7 @@ main {
 /* 幻灯片section */
 .slideshow-section {
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     scroll-snap-align: start;
     position: relative;
@@ -782,6 +789,7 @@ main {
 /* 地图section */
 .map-section {
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     background: #f5f5f7;
     scroll-snap-align: start;
     position: relative;
@@ -793,6 +801,7 @@ main {
     position: relative;
     width: 100%;
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     display: flex;
     align-items: center;
 }
@@ -854,6 +863,7 @@ main {
 /* 日历section */
 .calendar-section {
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     background: #f5f5f7;
     scroll-snap-align: start;
     position: relative;
@@ -865,6 +875,7 @@ main {
     position: relative;
     width: 100%;
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     display: flex;
     align-items: center;
 }
@@ -1541,6 +1552,7 @@ main {
 .map-section .tab-switcher {
     position: absolute;
     bottom: 30px;
+    bottom: calc(30px + env(safe-area-inset-bottom)); /* 考虑安全区域 */
     left: 50%;
     transform: translateX(-50%);
     display: flex !important;
@@ -2081,6 +2093,7 @@ main {
     .map-section {
         height: auto;
         min-height: 100vh;
+        min-height: 100dvh; /* 动态视口高度 */
         padding: 20px;
         background: #f5f5f7;
     }
@@ -2168,9 +2181,9 @@ main {
         overflow: hidden;
         justify-content: center;
         align-items: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(0, 0, 0, 0.1); /* 添加淡色边框确保边界清晰 */
-        background: rgba(255, 255, 255, 0.05); /* 添加淡背景色 */
+        box-shadow: none; /* 去掉阴影 */
+        border: none; /* 去掉边框 */
+        background: transparent; /* 完全透明背景 */
     }
 
     /* 移动端地图图片样式 - 完整显示 */
@@ -2197,28 +2210,8 @@ main {
         padding: 25px;
         background: transparent;
         text-align: center; /* 信息内容居中 */
-    }
-    
-    .time-item {
-        display: flex;
-        justify-content: center; /* 改为居中对齐 */
-        align-items: center;
-        gap: 12px;
-        padding: 20px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        flex-direction: column; /* 改为垂直布局 */
-    }
-    
-    .time-label {
-        font-size: 16px;
-        color: #666;
-        font-weight: 500;
-    }
-    
-    .time-value {
-        font-size: 16px;
-        color: #1d1d1f;
-        font-weight: 600;
+        max-width: 100%; /* 增加最大宽度 */
+        margin: 0 auto; /* 居中 */
     }
 
     /* 手写圈圈在移动端的调整 */
@@ -2235,6 +2228,7 @@ main {
     .map-section .tab-switcher {
         position: absolute;
         bottom: 16px; /* 20px * 0.8 = 16px */
+        bottom: calc(16px + env(safe-area-inset-bottom)); /* 考虑安全区域 */
         z-index: 100;
         padding: 6px; /* 8px * 0.8 = 6px */
         gap: 3px; /* 4px * 0.8 = 3px */
@@ -2245,7 +2239,7 @@ main {
         padding: 10px 16px; /* 12px 20px * 0.8 */
         border-radius: 16px; /* 20px * 0.8 = 16px */
         gap: 6px; /* 8px * 0.8 = 6px */
-        font-size: 11px; /* 14px * 0.8 = 11px */
+        font-size: 9px; /* 11px * 0.8 = 9px，进一步缩小 */
     }
     
     
@@ -2348,8 +2342,9 @@ main {
     .map-section .calendar-image-container {
         height: 208px; /* 260px * 0.8 = 208px */
         margin: 12px auto 24px auto !important; /* 居中图片容器 */
-        border: 1px solid rgba(0, 0, 0, 0.1) !important; /* 确保手机端也有边框 */
-        background: rgba(255, 255, 255, 0.05) !important; /* 添加淡背景色 */
+        border: none !important; /* 去掉边框 */
+        background: transparent !important; /* 完全透明背景 */
+        box-shadow: none !important; /* 去掉阴影 */
     }
     
     /* 手机端地图图片专用样式 - 完整显示 */
@@ -2375,31 +2370,12 @@ main {
     .map-section .time-info {
         padding: 16px; /* 20px * 0.8 = 16px */
         text-align: center; /* 信息内容居中 */
-    }
-    
-    .time-item {
-        display: flex;
-        justify-content: center; /* 改为居中对齐 */
-        align-items: center;
-        gap: 10px; /* 12px * 0.8 = 10px */
-        padding: 16px 0; /* 20px * 0.8 = 16px */
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        flex-direction: column; /* 改为垂直布局 */
-    }
-    
-    .time-label {
-        font-size: 11px; /* 14px * 0.8 = 11px */
-        color: #666;
-        margin-bottom: 4px; /* 5px * 0.8 = 4px */
-    }
-    
-    .time-value {
-        font-size: 13px; /* 16px * 0.8 = 13px */
-        color: #333;
-        font-weight: 600;
+        max-width: 100%; /* 增加最大宽度 */
+        margin: 0 auto; /* 居中 */
     }
 
-    .location-item {
+    .location-item,
+    .time-item {
         display: flex;
         justify-content: center; /* 改为居中对齐 */
         align-items: center;
@@ -2413,13 +2389,15 @@ main {
         border-bottom: none;
     }
 
-    .location-label {
+    .location-label,
+    .time-label {
         font-size: 11px; /* 14px * 0.8 = 11px */
         color: #666;
         margin-bottom: 4px; /* 5px * 0.8 = 4px */
     }
 
-    .location-value {
+    .location-value,
+    .time-value {
         font-size: 13px; /* 16px * 0.8 = 13px */
         color: #333;
         font-weight: 600;
@@ -2653,18 +2631,6 @@ main {
     .photo-2-copy {
         display: none;
     }
-    
-    /* 480px以下设备：默认暂停动画，等待滚动触发 */
-    .photo-1,
-    .photo-2 {
-        animation-play-state: paused;
-    }
-    
-    /* 当section进入视口时开始播放动画 */
-    .slideshow-section.in-view .photo-1,
-    .slideshow-section.in-view .photo-2 {
-        animation-play-state: running;
-    }
 }
 
 /* 超小屏幕响应式设计 */
@@ -2744,7 +2710,7 @@ main {
         align-items: center;
         gap: 8px;
         padding: 12px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         flex-direction: column;
     }
     
@@ -2785,6 +2751,7 @@ main {
     /* 超小屏幕Tab切换器调整 */
     .map-section .tab-switcher {
         bottom: 12px; /* 16px * 0.8 = 12px */
+        bottom: calc(12px + env(safe-area-inset-bottom)); /* 考虑安全区域 */
         padding: 5px; /* 6px * 0.8 = 5px */
         gap: 2px; /* 3px * 0.8 = 2px */
         border-radius: 16px; /* 20px * 0.8 = 16px */
@@ -2796,23 +2763,12 @@ main {
         gap: 5px; /* 6px * 0.8 = 5px */
         font-size: 9px; /* 11px * 0.8 = 9px */
     }
-    
-    /* 360px以下设备：默认暂停动画，等待滚动触发 */
-    .photo-1,
-    .photo-2 {
-        animation-play-state: paused;
-    }
-    
-    /* 当section进入视口时开始播放动画 */
-    .slideshow-section.in-view .photo-1,
-    .slideshow-section.in-view .photo-2 {
-        animation-play-state: running;
-    }
 }
 
 /* 倒计时section */
 .countdown-section {
     height: 100vh;
+    height: 100dvh; /* 动态视口高度 */
     background: linear-gradient(135deg,
         #667eea 0%,
         #764ba2 25%,
