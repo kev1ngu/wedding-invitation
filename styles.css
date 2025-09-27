@@ -2827,7 +2827,7 @@ main {
         repeating-conic-gradient(from 0deg, #000000 0deg 2deg, #333333 2deg 4deg);
     position: absolute;
     left: -280px;
-    top: 50%;
+    top: 40%;
     transform: translateY(-50%) rotate(0deg);
     animation: vinylSpin 3s linear infinite;
     box-shadow: 
