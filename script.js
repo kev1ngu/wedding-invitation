@@ -1076,24 +1076,61 @@ function initScrollArrow() {
             // 临时禁用动态滚动优化
             main.setAttribute('data-scroll-locked', 'true');
             
-            // 移动端使用scrollIntoView，桌面端使用scrollTo
-            if (window.innerWidth <= 768) {
+            // 根据屏幕尺寸使用不同的滚动方法
+            if (window.innerWidth <= 480) {
+                // 480px以下：使用更精确的滚动方法
+                const nextSectionTop = nextSection.offsetTop;
+                const currentScrollTop = main.scrollTop;
+                const targetScrollTop = nextSectionTop;
+                
+                // 使用requestAnimationFrame实现平滑滚动
+                const startScrollTop = currentScrollTop;
+                const distance = targetScrollTop - startScrollTop;
+                const duration = 800; // 滚动持续时间
+                let startTime = null;
+                
+                function smoothScroll(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    const easeProgress = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                    
+                    main.scrollTop = startScrollTop + distance * easeProgress;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(smoothScroll);
+                    } else {
+                        // 滚动完成后重新启用动态滚动优化
+                        setTimeout(() => {
+                            main.removeAttribute('data-scroll-locked');
+                        }, 200);
+                    }
+                }
+                
+                requestAnimationFrame(smoothScroll);
+            } else if (window.innerWidth <= 768) {
+                // 768px以下：使用scrollIntoView
                 nextSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
+                
+                // 滚动完成后重新启用动态滚动优化
+                setTimeout(() => {
+                    main.removeAttribute('data-scroll-locked');
+                }, 1000);
             } else {
+                // 桌面端：使用scrollTo
                 const nextSectionTop = nextSection.offsetTop;
                 main.scrollTo({
                     top: nextSectionTop,
                     behavior: 'smooth'
                 });
+                
+                // 滚动完成后重新启用动态滚动优化
+                setTimeout(() => {
+                    main.removeAttribute('data-scroll-locked');
+                }, 1000);
             }
-            
-            // 滚动完成后重新启用动态滚动优化
-            setTimeout(() => {
-                main.removeAttribute('data-scroll-locked');
-            }, 1000);
         }
     });
 }
