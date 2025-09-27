@@ -231,7 +231,7 @@ body {
     font-size: 20px;
     color: rgba(255, 255, 255, 0.9);
     animation: bounce 2s infinite;
-    pointer-events: none;
+    pointer-events: auto; /* 允许点击事件 */
 }
 
 @keyframes showArrow {
